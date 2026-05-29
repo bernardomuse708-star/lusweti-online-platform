@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Articles;
 
+use App\Events\FooterUpdated;
 use App\Filament\Resources\Articles\Pages\CreateArticle;
 use App\Filament\Resources\Articles\Pages\EditArticle;
 use App\Filament\Resources\Articles\Pages\ListArticles;
@@ -22,7 +23,7 @@ class ArticleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'ArticlesUpdate';
 
-        protected static string | \UnitEnum | null $navigationGroup = 'Editorial Office'; 
+    protected static string | \UnitEnum | null $navigationGroup = 'Editorial Office';
 
     public static function form(Schema $schema): Schema
     {
@@ -39,6 +40,17 @@ class ArticleResource extends Resource
         return [
             //
         ];
+    }
+
+
+    protected function afterSave(): void
+    {
+        event(new FooterUpdated());
+    }
+
+    protected function afterCreate(): void
+    {
+        event(new FooterUpdated());
     }
 
     public static function getPages(): array

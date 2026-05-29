@@ -4,13 +4,15 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast; // 🚀 Use this, NOT ShouldBroadcastNow
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 class BreakingNewsPublished implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
 
     public string $headline;
     public string $url;

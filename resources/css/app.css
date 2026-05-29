@@ -10,3 +10,24 @@
 @theme {
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
 }
+
+
+/* BREAKING NEWS TICKER */
+
+@keyframes ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+.animate-ticker {
+    animation: ticker 70s linear infinite;
+    will-change: transform;
+}
+
+.animate-ticker {
+    animation: ticker 60s linear infinite;
+}

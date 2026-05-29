@@ -15,9 +15,10 @@ class NewsTable
     {
         return $table
             ->columns([
-                TextColumn::make('headline')->searchable()->limit(40),
-                IconColumn::make('is_breaking')->boolean()->label('Breaking Status'),
-                TextColumn::make('created_at')->dateTime()->sortable(),
+                // Table
+                TextColumn::make('headline')->searchable()->weight('bold'),
+                IconColumn::make('is_breaking')->boolean()->color('danger'),
+                TextColumn::make('url')->limit(30)->color('gray'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([

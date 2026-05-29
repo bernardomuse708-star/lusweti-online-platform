@@ -1,28 +1,40 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\MagazineLayout;
 
 use App\Models\Article;
 use App\Models\Video;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\On;
+
 
 class MagazineHome extends Component
 {
     use WithPagination;
 
-    // protected $listeners = [
-    //     'echo:news,article.published' => '$refresh',
-    // ];
-
+    /**
+     * Listen to the broadcast channel.
+     * Triggers dynamic re-rendering of properties instantly.
+     */
+    #[On('echo:magazine-stream,article.mutated')]
+    public function refreshStream(): void
+    {
+        // Forces Livewire to run a secure differential DOM update 
+        $this->dispatch('$refresh');
+    }
 
     public function render(): View
     {
-        // Thread-safe dynamic stream isolation without standard offset bugs
-        $allArticles = Article::with('category')->published()->get();
+        // Performance guard: Limit collection pull to the maximum display capability threshold
+        $allArticles = Article::with('category')
+            ->published()
+            // ->is_visible()
+            ->take(25)
+            ->get();
 
-        return view('livewire.magazine-home', [
+        return view('livewire.magazine-layout.magazine-home', [
             'featuredLargeLeft' => $allArticles->where('layout_type', 'teaser-image-large')->take(2),
             'textTeasers'       => $allArticles->where('layout_type', 'teaser-image-none')->take(1),
             'rightThumbnails'   => $allArticles->where('layout_type', 'teaser-image-right')->take(2),

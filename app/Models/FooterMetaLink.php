@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Cache;
 
 class FooterMetaLink extends Model
 {
@@ -25,5 +26,13 @@ class FooterMetaLink extends Model
         $query->where('is_active', true)
             ->orderBy('sort_weight')
             ->orderBy('id');
+    }
+
+
+
+    protected static function booted(): void
+    {
+        static::saved(fn() => Cache::forget('global_footer_metalinks_v4'));
+        static::deleted(fn() => Cache::forget('global_footer_metalinks_v4'));
     }
 }

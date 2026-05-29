@@ -5,6 +5,12 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
+use App\Models\Article;
+use App\Observers\ArticleObserver;
+use App\Models\Video;
+use App\Observers\VideoObserver;
+use App\Models\Gallery;
+use App\Observers\GalleryObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +38,8 @@ class AppServiceProvider extends ServiceProvider
                     ->join($delimiter)
             );
         });
+        Article::observe(ArticleObserver::class);
+        Video::observe(VideoObserver::class);
+        Gallery::observe(GalleryObserver::class);
     }
 }

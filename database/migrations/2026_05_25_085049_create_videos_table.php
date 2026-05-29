@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('tentacle_id')->nullable()->unique();
             $table->text('description')->nullable();
             $table->string('video_category_id')->nullable();
-            $table->string('youtube_id')->unique();
+            $table->string('youtube_id')->nullable()->unique();
             $table->timestamp('published_at')->useCurrent()->index();
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_visible')->default(true)->index();

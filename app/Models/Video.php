@@ -3,30 +3,91 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Broadcasting\Channel;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Enums\Fit;
 
-class Video extends Model
+class Video extends Model implements HasMedia
 {
-    protected $fillable = ['title', 'video_category_id',
-        'tentacle_id', 'youtube_id', 'is_active','youtube_id',
+    use InteractsWithMedia;
+    // REMOVED: use BroadcastsEvents; -> Handled securely by VideoObserver now
+
+    protected $fillable = [
+        'video_category_id',
+        'title',
+        'slug',
+        'summary',
+        'youtube_id',
+        'is_visible',
         'published_at',
-        'is_visible', 'slug',];
+    ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'published_at'=>'datetime',
-        'is_visible'=>'boolean',
+        'is_visible' => 'boolean',
+        'published_at' => 'datetime',
     ];
+
+    /**
+     * Define the channels to broadcast model changes over.
+     */
+    public function broadcastOn(string $event): array
+    {
+        return [new Channel('videos')];
+    }
+
+    /**
+     * Spatie Media Engine Configuration
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('clip_payload')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('optimized')
+            ->fit(Fit::Crop, 800, 450)
+            ->format('webp')
+            ->quality(82)
+            ->nonQueued();
+    }
+
+    /**
+     * Determine if the video source is external YouTube
+     */
+    public function getIsYoutubeAttribute(): bool
+    {
+        return !empty($this->youtube_id);
+    }
+
+    /**
+     * Unified Asset URL Accessor
+     */
+    public function getVideoUrlAttribute(): ?string
+    {
+        if ($this->is_youtube) {
+            return "https://www.youtube.com/watch?v={$this->youtube_id}";
+        }
+
+        return $this->getFirstMediaUrl('clip_payload') ?: null;
+    }
+
+    public function getImagePathAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('video_thumbnail', 'optimized') ?: null;
+    }
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(VideoCategory::class, 'video_category_id');
     }
 
-    /**
-     * Scope streaming with atomic ordering protection
-     */
     public function scopePublishedFeed(Builder $query, int $categoryId): void
     {
         $query->where('video_category_id', $categoryId)
@@ -36,3 +97,4 @@ class Video extends Model
             ->orderByDesc('id');
     }
 }
+

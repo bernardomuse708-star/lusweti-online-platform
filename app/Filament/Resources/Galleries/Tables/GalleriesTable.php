@@ -7,6 +7,9 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn; // Specialized Spatie Column Engine
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class GalleriesTable
@@ -14,24 +17,12 @@ class GalleriesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('title')->searchable()->sortable(),
-                TextColumn::make('category.name')->sortable(),
-                TextColumn::make('tentacle_id')->label('Business ID'),
-                IconColumn::make('is_visible')->boolean()->label('Status'),
-                TextColumn::make('published_at')->dateTime()->sortable(),
-            ])
-            ->defaultSort('published_at', 'desc')
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->columns([SpatieMediaLibraryImageColumn::make('cover')->collection('cover')->square(),
+            TextColumn::make('title')->searchable()->weight('bold'),
+            TextColumn::make('category.name')->badge(),
+            ToggleColumn::make('is_visible')->label('Visible'),
+            TextColumn::make('published_at')->date()->sortable(),
+        ])
+        ->actions([    EditAction::make() ]);
     }
 }

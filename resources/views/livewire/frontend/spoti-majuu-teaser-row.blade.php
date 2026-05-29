@@ -65,9 +65,10 @@
 
                     @if($featuredItem->image_path)
                         <div class="aspect-[16/10] bg-slate-100 overflow-hidden">
-                            <img src="{{ $featuredItem->image_path }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                 alt="{{ $featuredItem->title }}">
+                             
+                            <img src="{{ $featuredItem->getFirstMediaUrl('default') }}" alt="{{ $featuredItem->title }}" loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+
                         </div>
                     @endif
 
@@ -138,9 +139,10 @@
                     <!-- IMAGE -->
                     @if($thumbItem->image_path)
                         <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                            <img src="{{ $thumbItem->image_path }}"
-                                 class="w-full h-full object-cover"
-                                 alt="{{ $thumbItem->title }}">
+                            <img src="{{ $thumbItem->getFirstMediaUrl('default') }}" alt="{{ $thumbItem->title }}" loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+
+                            
                         </div>
                     @endif
 

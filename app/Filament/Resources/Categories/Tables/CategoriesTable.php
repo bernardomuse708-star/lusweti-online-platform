@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class CategoriesTable
@@ -15,24 +16,10 @@ class CategoriesTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('slug'),
-                IconColumn::make('is_visible_in_nav')
-                    ->boolean()
-                    ->label('Visible'),
-            ])
-            ->reorderable('sort_order') // Enables Drag & Drop sorting automatically!
-            ->defaultSort('sort_order')
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+            TextColumn::make('name')->searchable()->sortable()->weight('bold'),
+            TextColumn::make('slug')->color('gray'),
+            ToggleColumn::make('is_visible_in_nav')->label('In Nav'),
+        ])
+        ->actions([ EditAction::make() ]);
+}
 }

@@ -6,14 +6,15 @@ use App\Models\Category;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Illuminate\Support\Str;
 
 class CategoryForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
+        return $schema->components([
+            Section::make('Category Details')->schema([
                 TextInput::make('name')
                     ->required()
                     ->live(onBlur: true)
@@ -25,7 +26,9 @@ class CategoryForm
 
                 Toggle::make('is_visible_in_nav')
                     ->label('Show in Main Navigation')
-                    ->default(true),
-            ]);
+                    ->default(true)
+                    ->columnSpanFull(),
+            ])->columns(2)->columnSpan(['default' => 3, 'md' => 2]),
+        ])->columns(3);
     }
 }

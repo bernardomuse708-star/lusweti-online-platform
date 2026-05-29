@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Mwanaspoti' }}</title>
-
+    <title>{{ $title ?? 'Lusweti-online-center' }}</title>
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Page-specific meta overrides --}}
@@ -16,20 +15,16 @@
 
     <livewire:frontend.site-header />
     <livewire:frontend.page-header-meta />
-
-    <!-- @if(isset($slot))
-    {{ $slot }}
-    @else
-    @yield('content')
-    @endif -->
     <main>
         @yield('content')
     </main>
-{{-- Authentication Modals --}}
+    {{-- Authentication Modals --}}
     <x-modals.login-modal />
     <livewire:frontend.global-page-footer />
     @livewireScripts
     @stack('scripts')
+
+    
 
 </body>
 

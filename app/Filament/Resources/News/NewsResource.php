@@ -21,7 +21,7 @@ class NewsResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-megaphone';
 
     protected static ?string $recordTitleAttribute = 'NewsUpdate';
-    protected static string | \UnitEnum | null $navigationGroup = 'Content Desk';
+    protected static string | \UnitEnum | null $navigationGroup = 'News Update Desk';
 
     public static function form(Schema $schema): Schema
     {

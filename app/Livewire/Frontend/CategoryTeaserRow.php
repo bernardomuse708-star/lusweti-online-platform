@@ -11,11 +11,6 @@ class CategoryTeaserRow extends Component
 {
     public string $categorySlug;
 
-    // protected $listeners = [
-    //     'echo:news,article.published' => '$refresh',
-    // ];
-
-
     // Cache properties directly into memory per render cycle to eliminate N+1 vulnerabilities
     public function getCategoryProperty(): ?Category
     {
@@ -43,8 +38,23 @@ class CategoryTeaserRow extends Component
         return Article::published()
             ->where('category_id', $this->category->id)
             ->when($featuredId, fn($query) => $query->where('id', '!=', $featuredId))
-            ->take(4)
+            ->take(4) // Fetching 4 to split between thumbnails and text-only lists
             ->get();
+    }
+
+    /**
+     * Orchestrates the data into the specific layout buckets expected by the Blade UI.
+     * This bridges the gap between the database queries and the frontend grid.
+     */
+    public function getColumnLayoutsProperty(): array
+    {
+        $sideArticles = $this->sideArticles;
+
+        return [
+            'large'      => $this->featuredArticle,
+            'thumbnails' => $sideArticles->take(2),               // First 2 go to the middle column
+            'textOnly'   => $sideArticles->skip(2)->values(),     // Remaining 2 go to the right column
+        ];
     }
 
     public function render(): View

@@ -17,6 +17,14 @@
             @endif
         </div>
 
+
+        <div class="">
+            {{-- 1. BREAKING NEWS TICKER --}}
+            <livewire:frontend.breaking-news/>
+        </div>
+
+
+
         {{-- Main Navigation Bar --}}
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-40 bg-white">
             <div class="flex h-16 sm:h-20 items-center justify-between">
@@ -45,9 +53,12 @@
                 {{-- Center Section: Logo --}}
                 <div class="flex justify-center flex-shrink-0">
                     <a href="/" wire:navigate aria-label="Homepage" class="group">
+
                         <img class="h-8 sm:h-10 w-auto transform transition-transform group-hover:scale-105"
                             src="{{ asset('resource/crblob/4351492/5c3d71953e078c66977c4abdce89ec1e/ms-logo-svg-data.svg') }}"
                             alt="Mwanaspoti">
+
+
                     </a>
                 </div>
 
@@ -115,7 +126,7 @@
 
         {{-- Sub Navigation (Categories Carousel) --}}
         <nav class="border-b border-gray-100 bg-white relative z-30">
-           
+
 
 
             <!-- CATEGORY BAR -->

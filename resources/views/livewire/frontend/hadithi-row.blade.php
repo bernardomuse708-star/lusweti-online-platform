@@ -23,23 +23,28 @@
                 </svg>
             </a>
         </div>
+        {{-- <!-- Main Grid --> --}}
 
-        <!-- Main Grid -->
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 max-w-7xl mx-auto">
 
-            <!-- Column 1: Featured Story (Focus Area) -->
+
+
+            {{-- <!-- Column 1: Featured Story (Focus Area) --> --}}
             <div class="lg:col-span-4">
-                @if($this->rowLayouts['featured'])
-                @php $featuredItem = $this->rowLayouts['featured']; @endphp
+                @if($this->columnLayouts['featured'])
+                @php $featuredItem = $this->columnLayouts['featured']; @endphp
                 <a href="/ms/{{ $this->category->slug }}/{{ $featuredItem->slug }}"
                     wire:navigate
                     class="group block h-full space-y-4">
 
                     <div class="relative overflow-hidden rounded-2xl bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-lg">
                         @if($featuredItem->image_path)
-                        <img src="{{ $featuredItem->image_path }}"
-                            class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            alt="{{ $featuredItem->title }}">
+                        <img src="{{ $featuredItem->getFirstMediaUrl('default') }}" alt="{{ $featuredItem->title }}" loading="lazy"
+                            class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+
+
+
                         @endif
                     </div>
 
@@ -57,9 +62,10 @@
                 @endif
             </div>
 
-            <!-- Column 2: Thumbnails (Information Density) -->
+
+            {{-- --}}
             <div class="lg:col-span-4 space-y-6">
-                @foreach($this->rowLayouts['thumbnails'] as $thumbItem)
+                @foreach($this->columnLayouts['thumbnails'] as $thumbItem)
                 <a href="/ms/{{ $this->category->slug }}/{{ $thumbItem->slug }}"
                     wire:navigate
                     class="group flex gap-4 border-b border-slate-100 pb-6 last:border-0 last:pb-0 transition-opacity hover:opacity-80">
@@ -82,9 +88,10 @@
                 @endforeach
             </div>
 
-            <!-- Column 3: Text Only (Scannability) -->
+
+            {{-- <!-- Column 3: Text Only (Scannability) -->    --}}
             <div class="lg:col-span-4 space-y-6">
-                @foreach($this->rowLayouts['textOnly'] as $textItem)
+                @foreach($this->columnLayouts['textOnly'] as $textItem)
                 <a href="/ms/{{ $this->category->slug }}/{{ $textItem->slug }}"
                     wire:navigate
                     class="group block border-l-2 border-slate-200 pl-4 transition-all hover:border-red-600">
@@ -100,7 +107,8 @@
 
         </div>
 
-        <!-- Ad Wrapper (Optimized) -->
+
+        {{-- Ad Wrapper (Optimized)  --}}
         <div class="mt-12 rounded-xl bg-slate-50 border border-slate-100 p-4 text-center">
             <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Advertisement</span>
         </div>

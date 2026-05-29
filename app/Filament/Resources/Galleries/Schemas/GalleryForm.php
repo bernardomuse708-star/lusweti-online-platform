@@ -7,7 +7,9 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload; // Standard Media Engine Component
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -17,9 +19,8 @@ class GalleryForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Grid::make(3)->schema([
+        return $schema->components([
+            Group::make()->schema([
                 Section::make('Identity Mapping Assignment')->schema([
                     TextInput::make('title')
                         ->required()
@@ -29,20 +30,29 @@ class GalleryForm
                     TextInput::make('slug')
                         ->required()
                         ->unique(Gallery::class, 'slug', ignoreRecord: true),
+                ])->columns(2),
 
+                Section::make('Media Assets URI Resolution')->schema([
+                    SpatieMediaLibraryFileUpload::make('cover')
+                        ->collection('cover')
+                        ->label('Gallery Cover Image')
+                        ->image()
+                        ->imageEditor()
+                        ->directory('galleries/covers')
+                        ->visibility('public')
+                        ->downloadable()
+                        ->maxSize(10240)
+                        ->required()
+                        ->columnSpanFull(),
+                ]),
+            ])->columnSpan(['default' => 3, 'md' => 2]),
+
+            Group::make()->schema([
+                Section::make('Publishing Context')->schema([
                     Select::make('category_id')
                         ->relationship('category', 'name')
                         ->preload()
                         ->searchable()
-                        ->required(),
-                ])->columnSpan(2),
-
-                Section::make('Structural Constraints Enforcer')->schema([
-                    TextInput::make('tentacle_id')
-                        ->label('Tracking Business Key')
-                        ->default(fn() => 'pic-' . Str::ulid())
-                        ->disabled()
-                        ->dehydrated()
                         ->required(),
 
                     DateTimePicker::make('published_at')
@@ -50,16 +60,17 @@ class GalleryForm
                         ->default(now()),
 
                     Toggle::make('is_visible')
-                        ->label('Is Published Visibility')
+                        ->label('Visibility Status')
                         ->default(true),
-                ])->columnSpan(1),
 
-                Section::make('Media Assets URI Resolution')->schema([
-                    TextInput::make('image_path')
-                        ->label('Cover Image Source Location URL path pointer')
+                    TextInput::make('tentacle_id')
+                        ->label('Tracking Business Key')
+                        ->default(fn() => 'pic-' . Str::ulid())
+                        ->disabled()
+                        ->dehydrated()
                         ->required(),
-                ])->columnSpanFull(),
-            ])
-            ]);
+                ]),
+            ])->columnSpan(['default' => 3, 'md' => 1]),
+        ])->columns(3);
     }
 }

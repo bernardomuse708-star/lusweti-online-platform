@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('role')->default('user'); // 'admin', 'editor', 'user'
             $table->string('phone_number')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
+            $table->string('last_login_ip')->nullable();
+            $table->string('avatar')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

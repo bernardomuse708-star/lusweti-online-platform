@@ -2,32 +2,37 @@
 
 namespace App\Events;
 
+use App\Models\Article;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ArticlePublished implements ShouldBroadcast
+class ArticlePublished implements ShouldBroadcastNow
 {
-    public $article;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct($article)
-    {
-        $this->article = $article;
-    }
+    /**
+     * Inject the updated article context.
+     */
+    public function __construct(public Article $article) {}
 
+    /**
+     * Broadcast to a public channel accessible by global visitors.
+     */
     public function broadcastOn(): array
     {
         return [
-            new Channel('news'),
+            new Channel('magazine-stream'),
         ];
     }
 
+    /**
+     * Broadcast naming standard alignment.
+     */
     public function broadcastAs(): string
     {
-        return 'article.published';
+        return 'article.mutated';
     }
 }

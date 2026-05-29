@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SiteSettings\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class SiteSettingForm
@@ -11,13 +12,12 @@ class SiteSettingForm
     {
         return $schema
             ->components([
-                TextInput::make('key')
-                    ->disabled() // Kept immutable via UI to enforce structural idempotency
-                    ->required(),
-                TextInput::make('value')
-                    ->label('Tagline/Value text')
-                    ->required()
-                    ->maxLength(255),
+                // Form
+                Section::make('Global Key-Value Configuration')->schema([
+                    TextInput::make('key')->disabled()->required()
+                        ->helperText('System structural key (immutable).'),
+                    TextInput::make('value')->label('Tagline/Value text')->required()->maxLength(255),
+                ])->columns(1)->columnSpan(['default' => 3, 'md' => 2])
             ]);
     }
 }

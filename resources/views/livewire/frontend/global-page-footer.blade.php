@@ -1,72 +1,151 @@
 <div>
-    <footer class="bg-slate-900 text-slate-300" wire:ignore>
-        <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+    <footer class="relative overflow-hidden bg-slate-950 text-slate-300">
 
-            <div class="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-6">
+        {{-- BACKGROUND EFFECTS --}}
+        <div class="pointer-events-none absolute inset-0 overflow-hidden opacity-20">
+            <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-red-600 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-500 blur-3xl"></div>
+        </div>
 
-                {{-- Categories Navigation --}}
-                <nav role="navigation" aria-label="Site index" class="mb-12">
-                    <ul class="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 lg:grid-cols-6">
-                        {{-- CHANGED: $categories is now $footerCategories --}}
-                        @forelse($footerCategories as $cat)
-                        <li wire:key="footer-cat-{{ $cat->id }}">
-                            <a href="/ms/{{ $cat->slug }}" class="block text-sm font-black uppercase tracking-widest text-white transition-colors hover:text-red-500" wire:navigate>
-                                {{ $cat->name }}
+        <div class="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+
+            {{-- TOP GRID --}}
+            <div class="grid gap-14 border-b border-slate-800 pb-14 lg:grid-cols-12">
+
+                {{-- BRAND --}}
+                <div class="lg:col-span-4">
+                    <div class="flex items-start gap-4">
+                        {{-- LOGO --}}
+                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-orange-500 shadow-lg shadow-red-500/20">
+                            <span class="text-lg font-black tracking-widest text-white">
+                                {{ strtoupper(substr($this->footerSettings['brand_name'] ?? 'LUSWETI', 0, 2)) }}
+
+                            </span>
+                        </div>
+
+                        {{-- BRAND CONTENT --}}
+                        <div class="min-w-0">
+                            <h2 class="truncate text-2xl font-black tracking-tight text-white">
+                                {{ $this->footerSettings['brand_name'] }}
+                            </h2>
+                            <p class="mt-3 max-w-sm text-sm leading-relaxed text-slate-400 line-clamp-3">
+                                {{ $this->footerSettings['brand_description'] }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- DECORATION --}}
+                    @if($this->footerSettings['footer_decoration'])
+                    <div class="mt-10">
+
+                        <img src="{{ \Illuminate\Support\Facades\Storage::url($this->footerSettings['footer_decoration']) }}"
+                            alt="{{ $this->footerSettings['brand_name'] ?? 'Decoration' }}"
+                            loading="lazy"
+                            class="h-20 w-20 opacity-40 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0">
+
+                    </div>
+                    @endif
+                </div>
+
+                {{-- SECTIONS --}}
+                <div class="lg:col-span-5">
+                    <div class="mb-7 flex items-center gap-3">
+                        <div class="h-6 w-1 rounded-full bg-red-500"></div>
+                        <h3 class="text-sm font-black uppercase tracking-[0.25em] text-white">
+                            {{ $this->footerSettings['sections_title'] }}
+                        </h3>
+                    </div>
+
+                    <ul class="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-3">
+
+                        @forelse($this->footerCategories as $cat)
+                        <li wire:key="footer-category-{{ $cat['id'] }}">
+                            <a
+                                href="/ms/{{ $cat['slug'] }}"
+                                wire:navigate
+                                class="group inline-flex items-center gap-3 text-sm font-bold tracking-wide text-slate-300 transition-all duration-300 hover:text-red-500">
+
+                                <span class="h-1.5 w-1.5 rounded-full bg-slate-600 transition-all duration-300 group-hover:scale-125 group-hover:bg-red-500"></span>
+
+                                <span class="line-clamp-1">
+                                    {{ $cat['name'] }}
+                                </span>
+                            </a>
+                        </li>
+
+                        @empty
+                        <li class="text-sm text-slate-500">Categories unavailable.</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                {{-- META LINKS --}}
+                <div class="lg:col-span-3">
+                    <div class="mb-7 flex items-center gap-3">
+                        <div class="h-6 w-1 rounded-full bg-orange-500"></div>
+                        <h3 class="text-sm font-black uppercase tracking-[0.25em] text-white">
+                            {{ $this->footerSettings['information_title'] }}
+                        </h3>
+                    </div>
+
+                    <ul class="space-y-5">
+                        @forelse($this->metaLinks as $index => $link)
+                        <li wire:key="footer-meta-{{ $index }}">
+                            <a
+                                href="{{ $link['url'] }}"
+                                class="group inline-flex items-center gap-3 text-sm font-medium text-slate-400 transition-all duration-300 hover:text-white"
+                                @if($link['open_in_new_tab'])
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                @endif>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                                <span class="line-clamp-1">
+                                    {{ $link['title'] }}
+                                </span>
                             </a>
                         </li>
                         @empty
-                        <li class="text-xs text-gray-500">Categories unavailable.</li>
+                        <li class="text-sm text-slate-500">Links unavailable.</li>
                         @endforelse
                     </ul>
-                </nav>
-
-                <!-- Site Index Column -->
-                <div class="col-span-2 lg:col-span-3">
-                    <h3 class="mb-6 text-sm font-bold uppercase tracking-wider text-white">Sections</h3>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        @foreach($footerCategories as $category)
-                        <li>
-                            <a href="/ms/{{ $category->slug }}"
-                                wire:navigate
-                                class="group flex items-center gap-2 text-sm font-medium transition-colors hover:text-red-500">
-                                <span class="h-1 w-1 rounded-full bg-slate-600 transition-colors group-hover:bg-red-500"></span>
-                                {{ $category->name }}
-                            </a>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <!-- Meta/Info Column -->
-                <div class="col-span-2">
-                    <h3 class="mb-6 text-sm font-bold uppercase tracking-wider text-white">Information</h3>
-                    <ul class="space-y-4 text-sm font-medium">
-                        <li><a href="/about" class="hover:text-red-500 transition-colors">About Us</a></li>
-                        <li><a href="/terms" class="hover:text-red-500 transition-colors">Terms of Service</a></li>
-                        <li><a href="/privacy" class="hover:text-red-500 transition-colors">Privacy Policy</a></li>
-                    </ul>
-                </div>
-
-                <!-- Branding / Decoration -->
-                <div class="col-span-2 md:col-span-1 lg:col-span-1 flex items-start justify-end">
-                    <img src="{{ asset('resource/crblob/4367644/a26213978044efb02abdc086cd487b55/footer-decoration-ms-svg-data.svg') }}"
-                        alt="Mwanaspoti"
-                        class="h-16 w-16 opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
-                        loading="lazy">
                 </div>
             </div>
 
-            <!-- Bottom Copyright Bar -->
-            <div class="mt-16 border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-xs text-slate-500">
-                    Nation Media Group © {{ $currentYear }}
+            {{-- FOOTER BOTTOM --}}
+            <div class="flex flex-col items-center justify-between gap-6 pt-8 md:flex-row">
+
+                {{-- COPYRIGHT --}}
+                <p class="text-center text-xs font-medium tracking-wide text-slate-500 md:text-left">
+                    © {{ $currentYear }} {{ $this->footerSettings['copyright_text'] ?? 'Lusweti Online Center' }}. All rights reserved.
                 </p>
-                <div class="flex gap-6">
-                    <a href="#" class="text-slate-500 hover:text-white transition-colors">Twitter</a>
-                    <a href="#" class="text-slate-500 hover:text-white transition-colors">Facebook</a>
+
+                {{-- SOCIAL LINKS --}}
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    @forelse($this->socialLinks as $social)
+                    <a
+                        href="{{ $social['url'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-500 transition-all duration-300 hover:text-white {{ $social['color_class'] }}">
+
+                        @if(!empty($social['logo_url']))
+
+
+
+                        <img src="{{ $social['logo_url'] }}" alt="{{ $social['name'] }} Logo" loading="lazy"
+                            class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+
+                        @endif
+
+                        <span>{{ $social['name'] }}</span>
+                    </a>
+                    @empty
+                    @endforelse
                 </div>
             </div>
         </div>
     </footer>
-
 </div>

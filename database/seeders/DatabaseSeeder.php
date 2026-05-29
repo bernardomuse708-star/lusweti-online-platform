@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             NewsSeeder::class,
-            // UserSeeder::class,//---> IGNORE THIS
+            BreakingNewsSeeder::class,
             NavigationSeeder::class,
             CategoryTeaserRowSeeder::class,
             ArticleSeeder::class,
@@ -30,13 +30,12 @@ class DatabaseSeeder extends Seeder
             PichaTeaserRowSeeder::class,
             HadithiTeaserSeeder::class,
             SiteSettingSeeder::class,
-            GallerySeeder::class,
             VideosSeeder::class,
             GlobalFooterComponentsSeeder::class,
             SpotiKenyaTeaserRowSeeder::class,
             SpotiMajuuTeaserRowSeeder::class,
-            VideoTeaserRowSeeder::class,           
-
+            VideoTeaserRowSeeder::class,
+            FooterDynamicSeeder::class,
         ]);
     }
 }

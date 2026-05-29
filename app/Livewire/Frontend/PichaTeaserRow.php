@@ -4,41 +4,55 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Category;
 use App\Models\Gallery;
-use Livewire\Component;
-use Livewire\Attributes\Computed;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class PichaTeaserRow extends Component
 {
-   
-// protected $listeners = [
-//         'echo:news,article.published' => '$refresh',
-//     ];
-/**
-     * Resolve the container layout context structure mapping
-     */
-    #[Computed]
-    public function category(): ?Category
+    public ?Category $category = null;
+
+    public Collection $collectionItems;
+
+    public function mount(): void
     {
-        return Category::where('slug', 'picha')
+        $this->category = Category::query()
+            ->where('slug', 'picha')
             ->where('is_active', true)
             ->first();
+
+        $this->loadGallaries();
+    }
+
+    public function loadGallaries(): void
+    {
+        if (! $this->category) {
+            $this->collectionItems = collect();
+            return;
+        }
+
+        $this->collectionItems = Gallery::query()
+            ->publishedStream($this->category->id)
+            ->with('media')
+            ->take(4)
+            ->get();
     }
 
     /**
-     * Compute exactly 4 structural feed items via the covered composite database index
+     * PRO STANDARD FIX: 
+     * 1. Exact channel name ('galleries')
+     * 2. Exact event name with dot prefix to ignore namespace ('.gallery.updated')
      */
-    #[Computed]
-    public function collectionItems(): Collection
+    #[On('echo:galleries,.gallery.updated')]
+    public function refreshGallery(array $payload): void
     {
-        if (!$this->category) {
-            return collect();
+        if (
+            isset($payload['category_id']) &&
+            $payload['category_id'] === $this->category?->id
+        ) {
+            $this->loadGallaries();
         }
-
-        return Gallery::publishedStream($this->category->id)
-            ->take(4)
-            ->get();
     }
 
     public function render(): View

@@ -18,6 +18,22 @@ Route::get('/', function () {
 
 
 
+Route::get('/stream', function () {
+
+    $token = 'YOUR_LIVEKIT_TOKEN';
+
+    $livekitUrl = env('LIVEKIT_URL');
+
+    $isHost = true;
+
+    return view('stream', [
+        'token' => $token,
+        'livekitUrl' => $livekitUrl,
+        'isHost' => $isHost,
+    ]);
+});
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {

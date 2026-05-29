@@ -11,9 +11,7 @@ use Illuminate\Support\Collection;
 
 class SpotiMajuuTeaserRow extends Component
 {
-    // protected $listeners = [
-    //     'echo:news,article.published' => '$refresh',
-    // ];
+    
 
     /**
      * Look-up and memory reference category layout settings context

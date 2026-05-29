@@ -2,6 +2,7 @@
 
 
 declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,13 +15,13 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 
-        'slug', 
-        'sort_order', 
-        'is_visible_in_footer', 
-        'sort_weight', 
-        'is_visible_in_nav', 
-        'text_color', 
+        'name',
+        'slug',
+        'sort_order',
+        'is_visible_in_footer',
+        'sort_weight',
+        'is_visible_in_nav',
+        'text_color',
         'is_active'
     ];
 
@@ -35,11 +36,17 @@ class Category extends Model
     // Automatically flush the Livewire navigation cache when a category is updated
     protected static function booted(): void
     {
-        $flushCache = fn () => Cache::forget('header-navigation-categories');
+        $flushCache = fn() => Cache::forget('header-navigation-categories');
 
         static::saved($flushCache);
         static::deleted($flushCache);
+
+        static::saved(fn() => Cache::forget('global_footer_categories_v4'));
+        static::deleted(fn() => Cache::forget('global_footer_categories_v4'));
     }
+
+
+
 
     public function scopeForFooter(Builder $query): void
     {
