@@ -67,15 +67,11 @@
                 >
 
                     {{-- Featured Image --}}
-                    @if($article->image_path)
+                    @if($article->featured_image_url)
 
                         <div class="relative overflow-hidden">
-                            <img src="{{ $article->getFirstMediaUrl('default') }}" alt="{{ $article->title }}" loading="lazy"
+                            <img src="{{ $article->featured_image_url }}" alt="{{ $article->title }}" loading="lazy"
                                 class="w-full h-56 object-cover transition duration-700 group-hover:scale-105">
-
-
-                           
-
                             <div
                                 class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold"
                                 style="

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -38,9 +39,16 @@ class ThreeColumnTeaserRow extends Component
             return collect();
         }
 
-        return Article::streamByCategory($this->category->id)
+        return Article::publishedFeed($this->category->id)
             ->take(3)
             ->get();
+    }
+
+    #[On('echo:magazine-stream,.article.mutated')]
+    public function refreshThreeColumn(): void
+    {
+        unset($this->gridArticles);
+        $this->dispatch('$refresh');
     }
 
     public function render(): View

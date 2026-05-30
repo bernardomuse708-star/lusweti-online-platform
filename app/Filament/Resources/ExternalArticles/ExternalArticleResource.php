@@ -26,7 +26,7 @@ class ExternalArticleResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = 'Multimedia Content';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon ='heroicon-o-globe-alt';
 
     public static function form(Schema $schema): Schema
     {

@@ -55,9 +55,9 @@ class HadithiRow extends Component
 
     /**
      * Modern Livewire 3 Event Listener
-     * Notice the dot (.) before article.published. This tells Echo not to prepend a namespace.
+     * Notice the dot (.) before article.mutated. This tells Echo not to prepend a namespace.
      */
-    #[On('echo:news,.article.published')]
+    #[On('echo:magazine-stream,.article.mutated')]
     public function refreshHadithiStream(array $payload): void
     {
         // Only refresh the DOM if the broadcasted article belongs to this specific section.

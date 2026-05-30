@@ -16,7 +16,7 @@ class MagazineCategoryStream extends Component
         $this->categoryId = $categoryId;
     }
 
-    #[On('echo:magazine-stream,article.mutated')]
+    #[On('echo:magazine-stream,.article.mutated')]
     public function refreshCategoryStream(): void
     {
         $this->dispatch('$refresh');

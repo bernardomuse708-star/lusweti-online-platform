@@ -51,12 +51,10 @@
                    wire:navigate
                    class="group block rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
 
-                    @if($featuredItem->hasMedia('cover'))
+                    @if($featuredItem->featured_image_url)
                         <div class="aspect-[16/10] overflow-hidden bg-slate-100">
-                            <img src="{{ $featuredItem->getFirstMediaUrl('default') }}" alt="{{ $featuredItem->title }}" loading="lazy"
+                            <img src="{{ $featuredItem->featured_image_url }}" alt="{{ $featuredItem->title }}" loading="lazy"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            
-                                
                         </div>
                     @endif
 
@@ -114,9 +112,9 @@
                         </div>
                     </div>
 
-                    @if($thumbItem->hasMedia('cover'))
+                    @if($thumbItem->featured_image_thumb_url)
                         <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                            <img src="{{ $thumbItem->getFirstMediaUrl('cover', 'thumbnail') }}"
+                            <img src="{{ $thumbItem->featured_image_thumb_url }}"
                                  class="w-full h-full object-cover"
                                  alt="{{ $thumbItem->title }}">
                         </div>

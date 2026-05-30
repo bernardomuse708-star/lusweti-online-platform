@@ -35,17 +35,15 @@
                 @php $featuredItem = $this->columnLayouts['featured']; @endphp
                 <a href="/ms/{{ $this->category->slug }}/{{ $featuredItem->slug }}"
                     wire:navigate
+                    wire:key="hadithi-featured-{{ $featuredItem->id }}"
                     class="group block h-full space-y-4">
 
                     <div class="relative overflow-hidden rounded-2xl bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-lg">
-                        @if($featuredItem->image_path)
-                        <img src="{{ $featuredItem->getFirstMediaUrl('default') }}" alt="{{ $featuredItem->title }}" loading="lazy"
+                        @php
+                            $imageUrl = $featuredItem->featured_image_url ?? asset('images/placeholders/article-default.jpg');
+                        @endphp
+                        <img src="{{ $imageUrl }}" alt="{{ $featuredItem->title }}" loading="lazy"
                             class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105">
-
-
-
-
-                        @endif
                     </div>
 
                     <div class="space-y-2">
@@ -68,13 +66,15 @@
                 @foreach($this->columnLayouts['thumbnails'] as $thumbItem)
                 <a href="/ms/{{ $this->category->slug }}/{{ $thumbItem->slug }}"
                     wire:navigate
+                    wire:key="hadithi-thumbnail-{{ $thumbItem->id }}"
                     class="group flex gap-4 border-b border-slate-100 pb-6 last:border-0 last:pb-0 transition-opacity hover:opacity-80">
                     <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                        @if($thumbItem->image_path)
-                        <img src="{{ $thumbItem->image_path }}"
+                        @php
+                            $thumbImageUrl = $thumbItem->featured_image_thumb_url ?? asset('images/placeholders/article-default.jpg');
+                        @endphp
+                        <img src="{{ $thumbImageUrl }}"
                             class="h-full w-full object-cover"
                             alt="{{ $thumbItem->title }}">
-                        @endif
                     </div>
                     <div class="flex flex-col justify-center">
                         <h3 class="text-sm font-bold leading-snug text-slate-900">

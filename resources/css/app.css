@@ -31,3 +31,15 @@
 .animate-ticker {
     animation: ticker 60s linear infinite;
 }
+
+
+/* sub-nav on SITE-HEADER  */
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

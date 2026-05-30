@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -42,6 +43,13 @@ class SpotiMajuuTeaserRow extends Component
             'thumbnails' => $stream->where('layout_style', 'thumbnail-right')->take(4),
             'textOnly'   => $stream->where('layout_style', 'text-only')->take(5),
         ];
+    }
+
+    #[On('echo:magazine-stream,.article.mutated')]
+    public function refreshSpotiMajuu(): void
+    {
+        unset($this->columnLayouts);
+        $this->dispatch('$refresh');
     }
 
     public function render(): View

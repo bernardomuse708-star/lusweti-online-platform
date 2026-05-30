@@ -63,12 +63,10 @@
                    wire:navigate
                    class="block group bg-white rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden">
 
-                    @if($featuredItem->image_path)
+                    @if($featuredItem->featured_image_url)
                         <div class="aspect-[16/10] bg-slate-100 overflow-hidden">
-                             
-                            <img src="{{ $featuredItem->getFirstMediaUrl('default') }}" alt="{{ $featuredItem->title }}" loading="lazy"
+                            <img src="{{ $featuredItem->featured_image_url }}" alt="{{ $featuredItem->title }}" loading="lazy"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-
                         </div>
                     @endif
 
@@ -137,12 +135,10 @@
                     </div>
 
                     <!-- IMAGE -->
-                    @if($thumbItem->image_path)
+                    @if($thumbItem->featured_image_thumb_url)
                         <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 shrink-0">
-                            <img src="{{ $thumbItem->getFirstMediaUrl('default') }}" alt="{{ $thumbItem->title }}" loading="lazy"
+                            <img src="{{ $thumbItem->featured_image_thumb_url }}" alt="{{ $thumbItem->title }}" loading="lazy"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-
-                            
                         </div>
                     @endif
 

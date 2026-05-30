@@ -53,6 +53,44 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Deployment / Production
+
+Use the following commands when deploying to production or preparing a Laravel Cloud release:
+
+```bash
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Recommended production `.env` settings:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-production-domain
+FILESYSTEM_DISK=public
+MAIL_MAILER=smtp
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK=local
+LIVEWIRE_TEMPORARY_FILE_UPLOAD_DIR=livewire-tmp
+```
+
+If you use cloud object storage, configure S3 values in `.env`:
+
+```env
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=your-bucket
+AWS_URL=https://your-bucket.s3.amazonaws.com
+```
+
+For local Herd development, keep a local Postgres/SQLite database and ensure `storage/framework/livewire-tmp` exists.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

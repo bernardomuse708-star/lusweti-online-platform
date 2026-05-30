@@ -46,7 +46,12 @@ class Video extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('clip_payload')
-            ->singleFile();
+            ->singleFile()
+            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+
+        $this->addMediaCollection('video_thumbnail')
+            ->singleFile()
+            ->useFallbackUrl(asset('images/placeholders/video-default.jpg'));
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -55,6 +60,12 @@ class Video extends Model implements HasMedia
             ->fit(Fit::Crop, 800, 450)
             ->format('webp')
             ->quality(82)
+            ->nonQueued();
+
+        $this->addMediaConversion('thumb')
+            ->width(400)
+            ->height(225)
+            ->sharpen(10)
             ->nonQueued();
     }
 
@@ -80,7 +91,18 @@ class Video extends Model implements HasMedia
 
     public function getImagePathAttribute(): ?string
     {
-        return $this->getFirstMediaUrl('video_thumbnail', 'optimized') ?: null;
+        if ($this->hasMedia('video_thumbnail')) {
+            return $this->getFirstMediaUrl('video_thumbnail', 'optimized');
+        }
+        return null;
+    }
+
+    public function getImageThumbUrlAttribute(): ?string
+    {
+        if ($this->hasMedia('video_thumbnail')) {
+            return $this->getFirstMediaUrl('video_thumbnail', 'thumb');
+        }
+        return null;
     }
 
     public function category(): BelongsTo

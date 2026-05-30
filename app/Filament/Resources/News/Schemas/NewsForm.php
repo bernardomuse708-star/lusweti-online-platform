@@ -5,6 +5,7 @@ namespace App\Filament\Resources\News\Schemas;
 use App\Models\News;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
@@ -15,7 +16,6 @@ class NewsForm
     {
         return $schema
             ->components([
-                // Form
                 Section::make('Live Update Mapping')->schema([
                     TextInput::make('headline')
                         ->required()
@@ -32,8 +32,17 @@ class NewsForm
                         ->label('Push as Live Breaking News')
                         ->helperText('Instantly pushes banner via WebSockets.')
                         ->columnSpanFull(),
-                ])->columns(2)->columnSpan(['default' => 3, 'md' => 2])
+                ])->columns(2)->columnSpan(['default' => 3, 'md' => 2]),
 
+                Section::make('Media Assets')->schema([
+                    SpatieMediaLibraryFileUpload::make('featured_image')
+                        ->collection('featured_image')
+                        ->label('Featured Image')
+                        ->image()
+                        ->imageEditor()
+                        ->columnSpanFull()
+                        ->disk('public'),
+                ])->collapsible(),
 
             ]);
     }

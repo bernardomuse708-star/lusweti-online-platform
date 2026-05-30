@@ -71,11 +71,22 @@ class VideoForm
                     SpatieMediaLibraryFileUpload::make('clip_payload')
                         ->label('Upload Local MP4 Video Asset')
                         ->collection('clip_payload')
-                        ->acceptedFileTypes(['video/mp4'])
+                        ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'])
                         ->maxSize(102400) // 100MB Max
                         ->helperText('Or upload a local file directly.')
                         ->visible(fn(Get $get) => $get('video_source_type') === 'local')
-                        ->required(fn(Get $get) => $get('video_source_type') === 'local'),
+                        ->required(fn(Get $get) => $get('video_source_type') === 'local')
+                        ->disk('public'),
+
+                    // 4. Video Thumbnail (Always Visible)
+                    SpatieMediaLibraryFileUpload::make('video_thumbnail')
+                        ->label('Video Thumbnail/Poster Image')
+                        ->collection('video_thumbnail')
+                        ->image()
+                        ->imageEditor()
+                        ->helperText('Recommended: 16:9 aspect ratio, minimum 800x450px')
+                        ->columnSpanFull()
+                        ->disk('public'),
 
                 ])->columns(1),
             ])->columnSpan(['default' => 3, 'md' => 2]),

@@ -33,8 +33,15 @@ class SocialLink extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        // Enforce a single logo image per social link
         $this->addMediaCollection('logo')
             ->singleFile();
+    }
+
+    public function getLogoUrlAttribute(): ?string
+    {
+        if ($this->hasMedia('logo')) {
+            return $this->getFirstMediaUrl('logo');
+        }
+        return null;
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -45,6 +46,13 @@ class KolamuTeaserRow extends Component
             'thumbnails' => $stream->where('layout_style', 'right-thumbnail')->take(4),
             'textOnly'   => $stream->where('layout_style', 'text-only')->take(5),
         ];
+    }
+
+    #[On('echo:magazine-stream,.article.mutated')]
+    public function refreshKolamu(): void
+    {
+        unset($this->rowLayouts);
+        $this->dispatch('$refresh');
     }
 
     public function render(): View

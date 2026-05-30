@@ -29,7 +29,8 @@
 
             <a
                 href="/ms/{{ $this->category->slug }}"
-                wire:navigate
+                target="_blank"
+                rel="noopener noreferrer"
                 class="hidden md:flex items-center gap-2 text-sm font-semibold text-red-600 hover:text-red-700">
                 View All Videos
 
@@ -60,7 +61,8 @@
 
                 <a
                     href="/ms/{{ $this->category->slug }}/{{ $video->slug }}"
-                    wire:navigate
+                    target="_blank"
+                    rel="noopener noreferrer"
                     class="block h-full">
 
                     {{-- Thumbnail --}}
@@ -78,6 +80,8 @@
                             <video 
                                 src="{{ $video->video_url }}" 
                                 preload="metadata" 
+                                autoplay 
+                                loop 
                                 muted 
                                 playsinline
                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
@@ -161,7 +165,8 @@
 
             <a
                 href="/ms/{{ $this->category->slug }}"
-                wire:navigate
+                target="_blank"
+                rel="noopener noreferrer"
                 class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 text-white font-semibold">
                 View All Videos
 

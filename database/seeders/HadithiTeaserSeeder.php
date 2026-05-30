@@ -86,5 +86,36 @@ class HadithiTeaserSeeder extends Seeder
         }
 
         Article::upsert($articles, ['tentacle_id'], ['title', 'slug', 'summary', 'image_path', 'display_style', 'published_at']);
+
+        // Add featured images using Media Library
+        $articlesWithImages = array_filter($articles, fn($a) => !empty($a['image_path']));
+        foreach ($articlesWithImages as $articleData) {
+            $article = Article::where('slug', $articleData['slug'])->first();
+            if ($article && $article->getMedia('featured_image')->isEmpty()) {
+                $filename = 'article-soka.jpg';
+                $sourcePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $filename);
+
+                if (file_exists($sourcePath)) {
+                    try {
+                        $article->addMedia($sourcePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('featured_image');
+                    } catch (\Exception $e) {
+                        $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                    }
+                } else {
+                    $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $filename);
+                    if (file_exists($altPath)) {
+                        try {
+                            $article->addMedia($altPath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('featured_image');
+                        } catch (\Exception $e) {
+                            $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

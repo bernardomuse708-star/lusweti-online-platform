@@ -112,10 +112,37 @@ class HomepageTeaserSeeder extends Seeder
         // Idempotent mass execution mapping against unique tracking identifier
         // 3. Tumia updateOrCreate badala ya upsert
         foreach ($articles as $articleData) {
-            Article::updateOrCreate(
+            $article = Article::updateOrCreate(
                 ['slug' => $articleData['slug']],
                 $articleData
             );
+
+            // Add featured image using Media Library if image_path is not null
+            if (!empty($articleData['image_path']) && $article->getMedia('featured_image')->isEmpty()) {
+                $filename = 'article-soka.jpg';
+                $sourcePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $filename);
+
+                if (file_exists($sourcePath)) {
+                    try {
+                        $article->addMedia($sourcePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('featured_image');
+                    } catch (\Exception $e) {
+                        $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                    }
+                } else {
+                    $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $filename);
+                    if (file_exists($altPath)) {
+                        try {
+                            $article->addMedia($altPath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('featured_image');
+                        } catch (\Exception $e) {
+                            $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                        }
+                    }
+                }
+            }
         }
         // 3. Seed Sidebar Media
         Video::updateOrCreate(

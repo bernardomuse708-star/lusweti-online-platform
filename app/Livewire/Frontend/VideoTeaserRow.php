@@ -6,21 +6,21 @@ use App\Models\VideoCategory;
 use App\Models\Video;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
 class VideoTeaserRow extends Component
 {
     /**
-     * Listen to the Reverb WebSocket channel for our custom unified event
+     * Engineer-class realtime listener for video updates.
+     * Listens to video broadcasts and re-renders when new videos are published.
+     * Broadcasts on 'videos' channel with 'feed.updated' event name.
      */
-    protected function getListeners()
+    #[On('echo:videos,.feed.updated')]
+    public function refreshVideos(): void
     {
-        return [
-            // Notice the dot (.) before the event name. 
-            // This is required when using a custom broadcastAs() name in Laravel Echo.
-            "echo:videos,.feed.updated" => '$refresh',
-        ];
+        $this->dispatch('$refresh');
     }
 
     #[Computed]

@@ -34,6 +34,8 @@ class ExternalArticleRow extends Component
         }
 
         return Article::publishedFeed($this->category()->id)
+            ->whereNotNull('external_url')
+            ->where('external_url', '!=', '')
             ->with('media')
             ->take(4)
             ->get();

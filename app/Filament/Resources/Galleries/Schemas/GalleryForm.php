@@ -42,6 +42,7 @@ class GalleryForm
                         ->visibility('public')
                         ->downloadable()
                         ->maxSize(10240)
+                        ->disk('public')
                         ->required()
                         ->columnSpanFull(),
                 ]),

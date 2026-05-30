@@ -151,13 +151,39 @@ class KolamuTeaserRowSeeder extends Seeder
             ];
 
             foreach ($articles as $article) {
-
-                Article::updateOrCreate(
+                $articleModel = Article::updateOrCreate(
                     [
                         'slug' => $article['slug'],
                     ],
                     $article
                 );
+
+                // Add featured image using Media Library if image_path is not null
+                if (!empty($article['image_path']) && $articleModel->getMedia('featured_image')->isEmpty()) {
+                    $filename = 'article-burudani.jpg';
+                    $sourcePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $filename);
+
+                    if (file_exists($sourcePath)) {
+                        try {
+                            $articleModel->addMedia($sourcePath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('featured_image');
+                        } catch (\Exception $e) {
+                            $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                        }
+                    } else {
+                        $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $filename);
+                        if (file_exists($altPath)) {
+                            try {
+                                $articleModel->addMedia($altPath)
+                                    ->preservingOriginal()
+                                    ->toMediaCollection('featured_image');
+                            } catch (\Exception $e) {
+                                $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                            }
+                        }
+                    }
+                }
             }
         });
     }

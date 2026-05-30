@@ -48,7 +48,8 @@ class ArticleForm
                         ->collection('featured_image')
                         ->image()
                         ->imageEditor()
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->disk('public'),
                 ])->collapsible(),
             ])->columnSpan(['default' => 3, 'md' => 2]),
 

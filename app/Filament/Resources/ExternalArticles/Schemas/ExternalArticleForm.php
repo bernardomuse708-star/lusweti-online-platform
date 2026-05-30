@@ -97,6 +97,7 @@ class ExternalArticleForm
                     SpatieMediaLibraryFileUpload::make('featured_image')
                         ->collection('featured_image')
                         ->columnSpanFull()
+                        ->disk('public')
                 ])->columns(2),
             ])->columnSpan(['default' => 3, 'md' => 2]),
 

@@ -9,6 +9,8 @@
 
     @fonts
 
+    @livewireStyles
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -88,8 +90,8 @@
                     </div>
 
                     <!-- Livewire Component Dynamic Feed -->
-                    <div class="flex-1 overflow-y-auto custom-scrollbar p-2" wire:ignore>
-                        {{-- @livewire('chat', ['room' => $stream->uuid]) --}}
+                    <div class="flex-1 overflow-y-auto custom-scrollbar p-2">
+                        @livewire('frontend.chat', ['room' => $room])
                     </div>
                 </div>
             </div>
@@ -877,8 +879,9 @@
 
             }));
         });
-    </script>
+    </script> 
 
+    @livewireScripts
 </body>
 
 </html>

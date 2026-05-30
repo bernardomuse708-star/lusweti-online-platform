@@ -1,5 +1,6 @@
 {{-- 1. BREAKING NEWS TICKER (Optimized) --}}
-<div class="">
+<div class=""
+>
     @if($this->hasBreaking())
     <div wire:key="breaking-ticker"
         x-data

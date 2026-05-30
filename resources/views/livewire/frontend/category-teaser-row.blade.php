@@ -22,10 +22,17 @@
             <article class="lg:col-span-1">
                 <a href="/ms/{{ $this->category->slug }}/{{ $largeItem->slug }}" wire:navigate class="group block h-full">
                     <div class="relative mb-6 overflow-hidden rounded-2xl bg-gray-100 shadow-sm transition-all duration-300 group-hover:shadow-lg">
-                        @if($largeItem->image_path)
-                        <img src="{{ $largeItem->image_path }}"
+                        @php
+                            $heroImage = $largeItem->featured_image_url ?? asset('images/placeholders/article-default.jpg');
+                            $heroMissing = !$largeItem->hasMedia('featured_image');
+                        @endphp
+                        <img src="{{ $heroImage }}"
                             alt="{{ $largeItem->title }}"
                             class="aspect-video w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        @if($heroMissing)
+                            <div class="absolute inset-x-0 bottom-0 bg-red-600/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white">
+                                Debug: no extracted image attached yet
+                            </div>
                         @endif
                     </div>
                     <div class="space-y-3">
@@ -52,13 +59,19 @@
                     <li wire:key="hadithi-thumb-{{ $thumbItem->id }}">
                         <a href="/ms/{{ $this->category->slug }}/{{ $thumbItem->slug }}" wire:navigate class="group flex items-start gap-4">
                             <div class="w-1/3 flex-shrink-0 overflow-hidden rounded-xl bg-gray-100 shadow-sm">
-                                @if($thumbItem->image_path)
-
-                                <img src="{{ $thumbItem->getFirstMediaUrl('default') }}" alt="{{ $thumbItem->title }}" loading="lazy"
-                                    class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105">
-
-
-                                @endif
+                                @php
+                                    $thumbImage = $thumbItem->featured_image_thumb_url ?? asset('images/placeholders/article-default.jpg');
+                                    $thumbMissing = !$thumbItem->hasMedia('featured_image');
+                                @endphp
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ $thumbImage }}" alt="{{ $thumbItem->title }}" loading="lazy"
+                                        class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    @if($thumbMissing)
+                                        <div class="absolute inset-x-0 bottom-0 bg-red-600/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                                            Debug: missing extracted image
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             <div class="flex-1 self-center">
                                 <h3 class="text-sm font-bold leading-snug text-gray-900 transition-colors group-hover:text-red-600 tracking-tight">

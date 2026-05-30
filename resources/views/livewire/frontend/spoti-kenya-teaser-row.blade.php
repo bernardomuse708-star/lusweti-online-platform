@@ -38,11 +38,12 @@
 
                 <a href="/ms/{{ $this->category->slug }}/{{ $heroItem->slug }}"
                     wire:navigate
+                    wire:key="spoti-hero-{{ $heroItem->id }}"
                     class="group block rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition bg-white">
 
-                    @if($heroItem->image_path)
+                    @if($heroItem->featured_image_url)
                     <div class="overflow-hidden">
-                        <img src="{{ $heroItem->getFirstMediaUrl('default') }}" alt="{{ $heroItem->title }}" loading="lazy"
+                        <img src="{{ $heroItem->featured_image_url }}" alt="{{ $heroItem->title }}" loading="lazy"
                             class="w-full h-64 object-cover group-hover:scale-105 transition duration-300">
                     </div>
                     @endif
@@ -90,13 +91,10 @@
                         </div>
                     </div>
 
-                    @if($thumbItem->image_path)
-
-
-                    <img src="{{ $thumbItem->getFirstMediaUrl('default') }}" alt="{{ $thumbItem->title }}" loading="lazy"
+                    @if($thumbItem->featured_image_thumb_url)
+                    <img src="{{ $thumbItem->featured_image_thumb_url }}" alt="{{ $thumbItem->title }}" loading="lazy"
+                        wire:key="spoti-thumb-{{ $thumbItem->id }}"
                         class="w-20 h-20 rounded-lg object-cover">
-
-
                     @endif
 
                 </a>

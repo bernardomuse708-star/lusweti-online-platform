@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Article;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -44,6 +45,17 @@ class SpotiKenyaTeaserRow extends Component
             'thumbnails' => $stream->where('display_layout', 'thumbnail-right')->take(4),
             'textOnly'   => $stream->where('display_layout', 'text-only')->take(5),
         ];
+    }
+
+    #[On('echo:magazine-stream,.article.mutated')]
+    public function refreshSpotiKenyaRow(array $payload): void
+    {
+        $categoryId = $payload['category_id'] ?? $payload['article']['category_id'] ?? null;
+
+        if ($categoryId === null || ($this->category && $categoryId === $this->category->id)) {
+            unset($this->dynamicLayoutColumns);
+            $this->dispatch('$refresh');
+        }
     }
 
     public function render(): View

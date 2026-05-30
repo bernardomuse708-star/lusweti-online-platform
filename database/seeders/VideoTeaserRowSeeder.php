@@ -61,6 +61,70 @@ class VideoTeaserRowSeeder extends Seeder
                 'created_at'        => $targetTime,
                 'updated_at'        => $targetTime,
             ],
+            // Local video example (without youtube_id)
+            [
+                'video_category_id' => $category->id,
+                'tentacle_id'       => '5469075-53',
+                'title'             => 'Local Video: Highlights from the match',
+                'slug'              => Str::slug('Local Video: Highlights from the match'),
+                'youtube_id'        => null,
+                'published_at'      => $targetTime->subMinutes(20),
+                'created_at'        => $targetTime,
+                'updated_at'        => $targetTime,
+            ],
         ], ['tentacle_id'], ['title', 'slug', 'youtube_id', 'published_at', 'updated_at']);
+
+        // Add thumbnails and local video clip to videos using Media Library
+        $videos = Video::all();
+        $thumbnailImage = 'article-soka.jpg';
+        $thumbnailPath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $thumbnailImage);
+
+        // Path to a sample local MP4 from storage
+        $localVideoPath = public_path('storage' . DIRECTORY_SEPARATOR . '1' . DIRECTORY_SEPARATOR . '01KSQTCDQBKT92ZGA30H7XCY0P.mp4');
+
+        foreach ($videos as $video) {
+            // Attach thumbnail to all videos
+            if ($video->getMedia('video_thumbnail')->isEmpty()) {
+                if (file_exists($thumbnailPath)) {
+                    try {
+                        $video->addMedia($thumbnailPath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('video_thumbnail');
+                        $this->command->info("Successfully attached thumbnail to: \"{$video->title}\"");
+                    } catch (\Exception $e) {
+                        $this->command->error("Failed to attach thumbnail to video: " . $e->getMessage());
+                    }
+                } else {
+                    // Try alternative path
+                    $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $thumbnailImage);
+                    if (file_exists($altPath)) {
+                        try {
+                            $video->addMedia($altPath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('video_thumbnail');
+                            $this->command->info("Successfully attached thumbnail to: \"{$video->title}\"");
+                        } catch (\Exception $e) {
+                            $this->command->error("Failed to attach thumbnail to video: " . $e->getMessage());
+                        }
+                    }
+                }
+            }
+
+            // Attach local MP4 to local video entries (those without youtube_id)
+            if (!$video->youtube_id && $video->getMedia('clip_payload')->isEmpty()) {
+                if (file_exists($localVideoPath)) {
+                    try {
+                        $video->addMedia($localVideoPath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('clip_payload');
+                        $this->command->info("Successfully attached local video clip to: \"{$video->title}\"");
+                    } catch (\Exception $e) {
+                        $this->command->error("Failed to attach local video clip: " . $e->getMessage());
+                    }
+                } else {
+                    $this->command->warn("Local video file not found at: {$localVideoPath}");
+                }
+            }
+        }
     }
 }

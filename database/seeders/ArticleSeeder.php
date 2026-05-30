@@ -19,18 +19,25 @@ class ArticleSeeder extends Seeder
 
     $article = Article::first();
     $filename = 'socer.png';
-    
-    // Cross-platform bulletproof pathing
-    $sourcePath = database_path('seeders' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $filename);
+
+    // Use public/storage/seeds for dummy images
+    $sourcePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $filename);
 
 
     if (File::exists($sourcePath)) {
         $article->addMedia($sourcePath)
-            ->preservingOriginal() // Keeps your seeders directory intact for the next migration run
+            ->preservingOriginal()
             ->toMediaCollection('featured_image');
     } else {
-        // Fallback elegantly if the file wasn't committed to git
-        $this->command->warn("Media asset missing at [{$sourcePath}]. Applied text database layers only.");
+        // Try alternative path
+        $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $filename);
+        if (File::exists($altPath)) {
+            $article->addMedia($altPath)
+                ->preservingOriginal()
+                ->toMediaCollection('featured_image');
+        } else {
+            $this->command->warn("Media asset missing at [{$sourcePath}] and [{$altPath}]. Applied text database layers only.");
+        }
     }
 
 
@@ -152,27 +159,38 @@ class ArticleSeeder extends Seeder
            // 3. Process image layer ONLY if a filename was explicitly declared
             if ($filename) {
                 if ($article->wasRecentlyCreated || $article->getMedia('featured_image')->isEmpty()) {
-                    
-                    // Use DIRECTORY_SEPARATOR for bulletproof cross-platform pathing
-                    $localSeedPath = database_path(
-                        'seeders' . DIRECTORY_SEPARATOR . 
-                        'media' . DIRECTORY_SEPARATOR . 
-                        $filename
-                    );
+
+                    // Use public/storage/seeds for dummy images
+                    $localSeedPath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $filename);
 
                     if (file_exists($localSeedPath)) {
                         try {
                             $article->addMedia($localSeedPath)
                                 ->preservingOriginal()
                                 ->toMediaCollection('featured_image');
-                            
+
                             $this->command->info("Successfully attached local media to: \"{$article->title}\"");
                         } catch (\Exception $e) {
                             Log::error("Spatie failed to process local file asset [{$article->id}]: " . $e->getMessage());
                             $this->command->error("Spatie disk processing error on item: {$article->title}");
                         }
                     } else {
-                        $this->command->warn("Missing local placeholder file at: {$localSeedPath}. Applied text fields only.");
+                        // Try alternative path
+                        $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $filename);
+                        if (file_exists($altPath)) {
+                            try {
+                                $article->addMedia($altPath)
+                                    ->preservingOriginal()
+                                    ->toMediaCollection('featured_image');
+
+                                $this->command->info("Successfully attached local media to: \"{$article->title}\"");
+                            } catch (\Exception $e) {
+                                Log::error("Spatie failed to process local file asset [{$article->id}]: " . $e->getMessage());
+                                $this->command->error("Spatie disk processing error on item: {$article->title}");
+                            }
+                        } else {
+                            $this->command->warn("Missing local placeholder file at: {$localSeedPath} and {$altPath}. Applied text fields only.");
+                        }
                     }
                 } else {
                     $this->command->line("Article entry matched: \"{$article->title}\" (Media library state intact)");

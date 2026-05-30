@@ -152,5 +152,42 @@ class SpotiMajuuTeaserRowSeeder extends Seeder
                 'updated_at' => $now,
             ]
         ], ['tentacle_id'], ['title', 'slug', 'summary', 'image_path', 'layout_style', 'is_prime', 'published_at', 'updated_at']);
+
+        // Add featured images using Media Library
+        $articlesWithImages = [
+            ['tentacle_id' => '5472098-73', 'filename' => 'article-soka.jpg'],
+            ['tentacle_id' => '5471904-74', 'filename' => 'article-burudani.jpg'],
+            ['tentacle_id' => '5471476-75', 'filename' => 'article-soka.jpg'],
+            ['tentacle_id' => '5471558-76', 'filename' => 'article-burudani.jpg'],
+            ['tentacle_id' => '5471406-77', 'filename' => 'article-soka.jpg'],
+        ];
+
+        foreach ($articlesWithImages as $item) {
+            $article = Article::where('tentacle_id', $item['tentacle_id'])->first();
+            if ($article && $article->getMedia('featured_image')->isEmpty()) {
+                $sourcePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $item['filename']);
+
+                if (file_exists($sourcePath)) {
+                    try {
+                        $article->addMedia($sourcePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('featured_image');
+                    } catch (\Exception $e) {
+                        $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                    }
+                } else {
+                    $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $item['filename']);
+                    if (file_exists($altPath)) {
+                        try {
+                            $article->addMedia($altPath)
+                                ->preservingOriginal()
+                                ->toMediaCollection('featured_image');
+                        } catch (\Exception $e) {
+                            $this->command->error("Failed to attach media to article: " . $e->getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

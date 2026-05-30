@@ -7,14 +7,13 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use App\Models\Category;
 use App\Models\News;
+use App\Models\SiteSetting;
 
 class SiteHeader extends Component
 {
     public ?array $latestBreakingNews = null;
 
-    // protected $listeners = [
-    //     'echo:news,article.published' => '$refresh',
-    // ];
+    
 
 
     public function mount()
@@ -29,9 +28,9 @@ class SiteHeader extends Component
         }
     }
 
-    // Listen to Laravel Reverb via Laravel Echo
+    // Listen to Laravel Reverb via Laravel Echo for breaking news updates
     #[On('echo:public-news,BreakingNewsPublished')]
-    public function handleNewBreakingNews($event)
+    public function handleNewBreakingNews($event): void
     {
         $this->latestBreakingNews = [
             'headline' => $event['headline'],
@@ -39,22 +38,50 @@ class SiteHeader extends Component
         ];
     }
 
+    // Listen for SiteHeader logo/branding updates from Filament
+    #[On('echo:site-header,.header.updated')]
+    public function refreshHeader(): void
+    {
+        $this->dispatch('$refresh');
+    }
+
     #[Computed]
     public function categories()
     {
         // Make sure you use ->get() to return complete Model objects
- return Category::where('is_visible_in_nav', true)
+        return Category::where('is_visible_in_nav', true)
             ->orderBy('sort_order')
-            ->get(['name', 'slug']);    }
+            ->get(['name', 'slug']);
+    }
 
-    // Cache categories to prevent redundant DB queries on every request
-    // #[Computed(cache: true, key: 'header-navigation-categories')]
-    // public function categories()
-    // {
-    //     return Category::where('is_visible_in_nav', true)
-    //         ->orderBy('sort_order')
-    //         ->get(['name', 'slug']);
-    // }
+    #[Computed]
+    public function siteLogoUrl(): string
+    {
+        $siteSetting = SiteSetting::where('key', 'site_header_logo')->first();
+
+        if ($siteSetting && $siteSetting->hasMedia('site_logo')) {
+            return $siteSetting->getFirstMediaUrl('site_logo', 'optimized');
+        }
+
+        $path = SiteSetting::getWithCache(
+            'site_header_logo',
+            'resource/crblob/4351492/5c3d71953e078c66977c4abdce89ec1e/ms-logo-svg-data.svg'
+        );
+
+        if (!$path) {
+            return asset('resource/crblob/4351492/5c3d71953e078c66977c4abdce89ec1e/ms-logo-svg-data.svg');
+        }
+
+        return preg_match('/^https?:\/\//', $path)
+            ? $path
+            : asset($path);
+    }
+
+    #[Computed]
+    public function siteLogoAlt(): string
+    {
+        return SiteSetting::getWithCache('site_header_logo_alt', 'Mwanaspoti');
+    }
 
     public function render()
     {

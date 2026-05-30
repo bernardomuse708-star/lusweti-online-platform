@@ -76,20 +76,22 @@ class Chat extends Component
         }
 
         $user = Auth::user();
-
-        if (!$user || !$this->streamId) {
+        if (!$user) {
             return;
         }
 
-        $msg = Message::create([
-            'stream_id' => $this->streamId,
-            'user_id' => $user->id,
-            'body' => $this->message,
-        ]);
+        $msg = null;
+        if ($this->streamId) {
+            $msg = Message::create([
+                'stream_id' => $this->streamId,
+                'user_id' => $user->id,
+                'body' => $this->message,
+            ]);
+        }
 
         $payload = [
             'user' => $user->name,
-            'text' => $msg->body,
+            'text' => $this->message,
             'time' => now()->format('H:i'),
         ];
 

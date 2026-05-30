@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
-            NewsSeeder::class,
+            // NewsSeeder::class,
             BreakingNewsSeeder::class,
             NavigationSeeder::class,
             CategoryTeaserRowSeeder::class,
@@ -30,12 +30,13 @@ class DatabaseSeeder extends Seeder
             PichaTeaserRowSeeder::class,
             HadithiTeaserSeeder::class,
             SiteSettingSeeder::class,
-            VideosSeeder::class,
+            SocialLinkSeeder::class,
             GlobalFooterComponentsSeeder::class,
             SpotiKenyaTeaserRowSeeder::class,
             SpotiMajuuTeaserRowSeeder::class,
             VideoTeaserRowSeeder::class,
             FooterDynamicSeeder::class,
+            ExternalArticleSeeder::class,
         ]);
     }
 }

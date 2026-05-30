@@ -122,29 +122,7 @@
                 </p>
 
                 {{-- SOCIAL LINKS --}}
-                <div class="flex flex-wrap items-center justify-center gap-4">
-                    @forelse($this->socialLinks as $social)
-                    <a
-                        href="{{ $social['url'] }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="group flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-500 transition-all duration-300 hover:text-white {{ $social['color_class'] }}">
-
-                        @if(!empty($social['logo_url']))
-
-
-
-                        <img src="{{ $social['logo_url'] }}" alt="{{ $social['name'] }} Logo" loading="lazy"
-                            class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105">
-
-
-                        @endif
-
-                        <span>{{ $social['name'] }}</span>
-                    </a>
-                    @empty
-                    @endforelse
-                </div>
+                <livewire:frontend.social-links/>
             </div>
         </div>
     </footer>

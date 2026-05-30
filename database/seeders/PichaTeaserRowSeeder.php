@@ -27,28 +27,26 @@ class PichaTeaserRowSeeder extends Seeder
             [
                 'tentacle_id' => '5467648-81',
                 'title' => 'Rio Ferdinand avutiwa na utalii wa Serengeti',
-                'image' => 'rio-pc.jpg',
-                'published_at' => now()->subDays(1), // Yesterday
+                'image' => 'article-soka.jpg',
+                'published_at' => now()->subDays(1),
             ],
             [
                 'tentacle_id' => '5465104-82',
                 'title' => 'Rio Ferdinand atua nchini, mamia wampokea',
-                'image' => 'rio-pc.jpg',
-                'published_at' => now()->subDays(3), // 3 Days ago
+                'image' => 'article-burudani.jpg',
+                'published_at' => now()->subDays(3),
             ],
-
             [
                 'tentacle_id' => '5455798-83',
                 'title' => 'Namna Barcelona ilivyoshangilia ubingwa wa 29 La Liga',
-                'image' => 'barca-pc.jpg',
-                'published_at' => now()->subDays(2), // 3 Days ago
+                'image' => 'article-soka.jpg',
+                'published_at' => now()->subDays(2),
             ],
-
             [
                 'tentacle_id' => '5352936-84',
                 'title' => 'MKAPA',
-                'image' => 'mka-01.png',
-                'published_at' => now()->subDays(4), // 4 Days ago
+                'image' => 'article-burudani.jpg',
+                'published_at' => now()->subDays(4),
             ],
         ];
 
@@ -67,16 +65,23 @@ class PichaTeaserRowSeeder extends Seeder
                 ]
             );
 
-            $imagePath = database_path('seeders/media/' . $item['image']);
+            // Use public/storage/seeds for dummy images
+            $imagePath = public_path('storage' . DIRECTORY_SEPARATOR . 'seeds' . DIRECTORY_SEPARATOR . $item['image']);
 
-            if (
-                file_exists($imagePath) &&
-                $Gallery->getMedia('cover')->isEmpty()
-            ) {
+            if (file_exists($imagePath) && $Gallery->getMedia('cover')->isEmpty()) {
                 $Gallery
                     ->addMedia($imagePath)
                     ->preservingOriginal()
                     ->toMediaCollection('cover');
+            } else {
+                // Try alternative path
+                $altPath = public_path('seeds' . DIRECTORY_SEPARATOR . $item['image']);
+                if (file_exists($altPath) && $Gallery->getMedia('cover')->isEmpty()) {
+                    $Gallery
+                        ->addMedia($altPath)
+                        ->preservingOriginal()
+                        ->toMediaCollection('cover');
+                }
             }
         }
     }

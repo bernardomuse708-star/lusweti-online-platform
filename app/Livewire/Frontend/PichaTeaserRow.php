@@ -40,9 +40,9 @@ class PichaTeaserRow extends Component
     }
 
     /**
-     * PRO STANDARD FIX: 
-     * 1. Exact channel name ('galleries')
-     * 2. Exact event name with dot prefix to ignore namespace ('.gallery.updated')
+     * Engineer-class realtime listener.
+     * Listens to gallery broadcasts and re-renders when the category matches.
+     * Broadcasts on 'galleries' channel with 'gallery.updated' event name.
      */
     #[On('echo:galleries,.gallery.updated')]
     public function refreshGallery(array $payload): void
@@ -52,6 +52,7 @@ class PichaTeaserRow extends Component
             $payload['category_id'] === $this->category?->id
         ) {
             $this->loadGallaries();
+            $this->dispatch('$refresh');
         }
     }
 
