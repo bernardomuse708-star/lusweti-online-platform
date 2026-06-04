@@ -17,6 +17,12 @@ class HomepageTeaserSeeder extends Seeder
         $kolamu = Category::updateOrCreate(['slug' => 'kolamu'], ['name' => 'Kolamu', 'bg_color' => '#F5911E']);
         $burudani = Category::updateOrCreate(['slug' => 'burudani'], ['name' => 'Burudani', 'bg_color' => '#F5911E']);
         $spotiMajuu = Category::updateOrCreate(['slug' => 'spoti-majuu'], ['name' => 'Spoti Majuu', 'bg_color' => '#F5911E']);
+        $spotiKenya = Category::updateOrCreate(['slug' => 'spoti-kenya'], ['name' => 'Spoti Kenya', 'bg_color' => '#F5911E']);
+        $hadithi = Category::updateOrCreate(['slug' => 'hadithi'], ['name' => 'Hadithi', 'bg_color' => '#F5911E']);
+        $picha = Category::updateOrCreate(['slug' => 'picha'], ['name' => 'Picha', 'bg_color' => '#F5911E']);
+        $external = Category::updateOrCreate(['slug' => 'external'], ['name' => 'External', 'bg_color' => '#F5911E']);
+        $video = Category::updateOrCreate(['slug' => 'video'], ['name' => 'Video', 'bg_color' => '#F5911E']);
+        $mafumbo = Category::updateOrCreate(['slug' => 'mafumbo'], ['name' => 'Mafumbo', 'bg_color' => '#F5911E']);
         // 2. Structural Article Payload Array (Ensures absolute execution safety)
         $articles = [
             [
@@ -53,6 +59,17 @@ class HomepageTeaserSeeder extends Seeder
                 'published_at' => now()->subHours(3),
             ],
             [
+                'tentacle_id'  => '5471598-23',
+                'category_id'  => $soka->id,
+                'title'        => 'Yanga, Azam kusaka pointi tatu muhimu Ligi Kuu Bara',
+                'slug'         => Str::slug('Yanga Azam kusaka pointi tatu muhimu Ligi Kuu Bara'),
+                'summary'      => null,
+                'layout_type'  => 'teaser-image-right',
+                'image_path'   => '/resource/blob/5471600/596f398bf02d7fcc83f786a4ad40d956/mechi-pict-data.jpg',
+                'is_prime'     => false,
+                'published_at' => now()->subHours(3),
+            ],
+            [
                 'tentacle_id'  => '5471636-24',
                 'category_id'  => $soka->id,
                 'title'        => 'Mwamnyeto afunguka mazito, amtaja beki Simba',
@@ -65,7 +82,7 @@ class HomepageTeaserSeeder extends Seeder
             ],
             [
                 'tentacle_id'  => '5471108-25',
-                'category_id'  => $soka->id,
+                'category_id'  => $mafumbo->id,
                 'title'        => 'Simon Msuva aisaka rekodi Iraq',
                 'slug'         => Str::slug('Simon Msuva aisaka rekodi Iraq'),
                 'summary'      => 'WAKATI msimu wa Ligi Kuu Iraq ukikaribia mwishoni, mashabiki wa soka Tanzania wanasubiri kushuhudia Simon Msuva akiivunja rekodi yake binafsi ya mabao akiwa na Al Talaba.',
@@ -102,8 +119,63 @@ class HomepageTeaserSeeder extends Seeder
                 'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
                 'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
                 'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
-                'layout_type'  => 'teaser-image-right',
                 'image_path'   => '/resource/blob/5471120/f27a75f20f028dedecaa37423a40ed0f/chirwa-pict-data.png',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            [
+                'tentacle_id'  => '5471118-3c',
+                'category_id'  => $spotiMajuu->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            [
+                'tentacle_id'  => '5471118-4c',
+                'category_id'  => $spotiKenya->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            [
+                'tentacle_id'  => '5471118-6c',
+                'category_id'  => $picha->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
+                'image_path'   => '/resource/blob/5471120/f27a75f20f028dedecaa37423a40ed0f/chirwa-pict-data.png',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            [
+                'tentacle_id'  => '5471118-7c',
+                'category_id'  => $video->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            [
+                'tentacle_id'  => '5471118-4c',
+                'category_id'  => $hadithi->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
+                'is_prime'     => false,
+                'published_at' => now(),
+            ],
+            
+            [
+                'tentacle_id'  => '5471118-4c',
+                'category_id'  => $external->id,
+                'title'        => 'Chirwa apania kuipandisha Kagera Sugar',
+                'slug'         => Str::slug('Chirwa apania kuipandisha Kagera Sugar'),
+                'summary'      => 'MSHAMBULIAJI wa Kagera Sugar, Mzambia Obrey Chirwa amesema licha ya kasi yake ya kufunga mabao msimu huu, ila kipaumbele chake cha kwanza ni kukirejesha kikosi hicho Ligi Kuu Bara, hata kama...',
                 'is_prime'     => false,
                 'published_at' => now(),
             ],

@@ -1,49 +1,47 @@
-{{-- 1. BREAKING NEWS TICKER (Optimized) --}}
-<div class=""
->
+{{-- 1. BREAKING NEWS TICKER (BBC Editorial Layout) --}}
+<div class="w-full bg-red-700 border-b border-red-800 rounded-none">
     @if($this->hasBreaking())
     <div wire:key="breaking-ticker"
-        x-data
-        class="bg-red-600 text-white text-sm font-semibold flex items-center overflow-hidden border-b border-black/10">
+         x-data
+         class="text-white text-sm font-bold flex items-center overflow-hidden">
 
-        {{-- Static Label --}}
-        <div class="px-4 py-2 bg-white uppercase tracking-wider shrink-0 shadow-lg z-10">
-            <p class="text-red-600 flex items-center gap-2">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                </span>
-                Breaking
-            </p>
+        {{-- STARK GEOMETRIC STATIC BADGE --}}
+        <div class="px-5 py-2.5 bg-neutral-950 text-white uppercase tracking-widest font-black shrink-0 z-20 flex items-center gap-2 rounded-none border-r border-neutral-900">
+            {{-- Flat block indicator (no soft blurs or glowing ambient circles) --}}
+            <span class="w-2 h-2 bg-red-600 rounded-none block animate-pulse" aria-hidden="true"></span>
+            <span>Breaking</span>
         </div>
-        {{-- Scrolling Area --}}
-        <div class="flex-1 overflow-hidden whitespace-nowrap">
-            <div class="flex animate-ticker hover:[animation-play-state:paused] w-max min-w-full">
-                {{-- FIX: Swapped Alpine <template> for Blade @for to fix Livewire DOM diffing --}}
-                @for ($i = 0; $i < 10; $i++)
-                    <div class="flex items-center gap-8 px-4">
-                    @foreach ($breakingItems as $item)
-                    {{-- FIX: Added -$i to wire:key to prevent duplicate ID crashes --}}
-                    <div class="flex items-center gap-2" wire:key="breaking-{{ $item->id }}-{{ $i }}">
-                        <button class="py-3 px-1.5">
-                            <span class="text-white-300 text-md opacity-70 py-2 px-1.5">•LIVE</span>
-                        </button>
-                        @php
-                        $isInternal = str_starts_with($item->url, config('app.url'));
-                        @endphp
 
-                        <a
-                            href="{{ $item->url }}"
-                            @if($isInternal) wire:navigate.hover @else target="_blank" rel="noopener noreferrer" @endif
-                            class="hover:text-yellow-300 transition-colors uppercase tracking-tight">
+        {{-- EDITORIAL SCROLLING TRACK --}}
+        <div class="flex-1 overflow-hidden whitespace-nowrap flex items-center relative z-10 py-2">
+            <div class="flex animate-ticker hover:[animation-play-state:paused] w-max min-w-full items-center">
+                
+                @for ($i = 0; $i < 6; $i++)
+                <div class="flex items-center gap-12 px-6">
+                    @foreach ($breakingItems as $item)
+                    @php
+                        $isInternal = str_starts_with($item->url, config('app.url'));
+                    @endphp
+
+                    <div class="flex items-center gap-3" wire:key="breaking-{{ $item->id }}-{{ $i }}">
+                        {{-- Flat, crisp contextual live badge --}}
+                        <span class="bg-white text-red-700 px-1.5 py-0.5 text-[9px] font-black tracking-widest rounded-none uppercase block select-none">
+                            Live
+                        </span>
+
+                        <a href="{{ $item->url }}"
+                           @if($isInternal) wire:navigate.hover @else target="_blank" rel="noopener noreferrer" @endif
+                           class="text-white text-sm font-extrabold tracking-tight uppercase hover:underline transition-none">
                             {{ $item->display_title }}
                         </a>
                     </div>
                     @endforeach
+                </div>
+                @endfor
+
             </div>
-            @endfor
         </div>
+
     </div>
-</div>
-@endif
+    @endif
 </div>

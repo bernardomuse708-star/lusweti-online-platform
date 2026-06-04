@@ -49,7 +49,7 @@
         </header>
 
         <!-- Master Stage / Mobile Stack to Desktop Grid Layout -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 pt-4 pb-32 sm:pb-36">
+        <main class="mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 pt-4 pb-32 sm:pb-36">
 
             <!-- PRIMARY BROADCAST STAGE -->
             <div class="lg:col-span-8 flex flex-col gap-3">

@@ -38,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
                     ->join($delimiter)
             );
         });
+        
+        // Register layout hint path
+        view()->addNamespace('layouts', resource_path('views/layout'));
+        
         Article::observe(ArticleObserver::class);
         Video::observe(VideoObserver::class);
         Gallery::observe(GalleryObserver::class);

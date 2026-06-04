@@ -8,12 +8,13 @@ use Livewire\Attributes\Computed;
 use App\Models\Category;
 use App\Models\News;
 use App\Models\SiteSetting;
+use App\Models\Page;
 
 class SiteHeader extends Component
 {
     public ?array $latestBreakingNews = null;
 
-    
+
 
 
     public function mount()
@@ -53,6 +54,24 @@ class SiteHeader extends Component
             ->orderBy('sort_order')
             ->get(['name', 'slug']);
     }
+
+    #[Computed]
+    public function pages()
+    {
+        // Get published pages that should be visible in navigation
+        return Page::published()
+            ->where('status', 'published')
+            ->orderBy('title')
+            ->get(['title', 'slug']);
+    }
+
+
+    // #[Computed]
+    // public function categories()
+    // {
+    //     // Temporarily fetch everything to see if your seeded data appears
+    //     return Category::orderBy('sort_order')->get(['name', 'slug']);
+    // }
 
     #[Computed]
     public function siteLogoUrl(): string

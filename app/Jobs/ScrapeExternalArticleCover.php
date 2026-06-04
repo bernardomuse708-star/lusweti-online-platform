@@ -3,14 +3,13 @@
 namespace App\Jobs;
 
 use App\Models\Article;
-use Illuminate\Bus\Dispatchable;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
 
 class ScrapeExternalArticleCover implements ShouldQueue
 {

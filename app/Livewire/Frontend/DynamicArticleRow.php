@@ -38,7 +38,7 @@ class DynamicArticleRow extends Component
 
         return Article::publishedStream($this->category()->id)
             ->with('media')
-            ->take(4)
+            ->take(7)
             ->get();
     }
 

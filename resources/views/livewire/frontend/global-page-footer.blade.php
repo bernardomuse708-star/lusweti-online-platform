@@ -1,129 +1,106 @@
 <div>
-    <footer class="relative overflow-hidden bg-slate-950 text-slate-300">
+    <footer class="w-full bg-neutral-950 text-neutral-300 border-t-4 border-neutral-800 antialiased font-sans">
 
-        {{-- BACKGROUND EFFECTS --}}
-        <div class="pointer-events-none absolute inset-0 overflow-hidden opacity-20">
-            <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-red-600 blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-orange-500 blur-3xl"></div>
-        </div>
+        <div class=" py-12 mx-auto max-w-7xl">
 
-        <div class="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+            {{-- MAIN EDITORIAL COLUMNS --}}
+            <div class=" grid grid-cols-1 gap-10 border-b border-neutral-800 pb-12 lg:grid-cols-12 lg:gap-8">
 
-            {{-- TOP GRID --}}
-            <div class="grid gap-14 border-b border-slate-800 pb-14 lg:grid-cols-12">
-
-                {{-- BRAND --}}
-                <div class="lg:col-span-4">
+                {{-- BRAND ARCHITECTURE --}}
+                <div class="lg:col-span-4 space-y-4 ml-4">
                     <div class="flex items-start gap-4">
-                        {{-- LOGO --}}
-                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-orange-500 shadow-lg shadow-red-500/20">
-                            <span class="text-lg font-black tracking-widest text-white">
-                                {{ strtoupper(substr($this->footerSettings['brand_name'] ?? 'LUSWETI', 0, 2)) }}
-
-                            </span>
+                        {{-- Flat Geometric Logo Box --}}
+                        <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-none bg-red-700 text-white font-black tracking-tighter text-xl">
+                            {{ strtoupper(substr($this->footerSettings['brand_name'] ?? 'LU', 0, 2)) }}
                         </div>
 
-                        {{-- BRAND CONTENT --}}
                         <div class="min-w-0">
-                            <h2 class="truncate text-2xl font-black tracking-tight text-white">
+                            <h2 class="text-lg font-black tracking-tight text-white uppercase">
                                 {{ $this->footerSettings['brand_name'] }}
                             </h2>
-                            <p class="mt-3 max-w-sm text-sm leading-relaxed text-slate-400 line-clamp-3">
+                            <p class="mt-2 max-w-sm text-xs leading-relaxed text-neutral-400 font-normal line-clamp-3">
                                 {{ $this->footerSettings['brand_description'] }}
                             </p>
                         </div>
                     </div>
 
-                    {{-- DECORATION --}}
+                    {{-- Flat Graphic Decoration 
                     @if($this->footerSettings['footer_decoration'])
-                    <div class="mt-10">
-
+                    <div class="pt-2">
                         <img src="{{ \Illuminate\Support\Facades\Storage::url($this->footerSettings['footer_decoration']) }}"
                             alt="{{ $this->footerSettings['brand_name'] ?? 'Decoration' }}"
                             loading="lazy"
-                            class="h-20 w-20 opacity-40 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0">
-
+                            class="h-12 w-auto rounded-none opacity-30 grayscale block">
                     </div>
-                    @endif
+                    @endif--}}
                 </div>
 
-                {{-- SECTIONS --}}
+                {{-- CATEGORY DIRECTORY GRID --}}
                 <div class="lg:col-span-5">
-                    <div class="mb-7 flex items-center gap-3">
-                        <div class="h-6 w-1 rounded-full bg-red-500"></div>
-                        <h3 class="text-sm font-black uppercase tracking-[0.25em] text-white">
+                    <div class="mb-5 border-b border-neutral-800 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-white">
                             {{ $this->footerSettings['sections_title'] }}
                         </h3>
                     </div>
 
-                    <ul class="grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-3">
-
+                    <ul class="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
                         @forelse($this->footerCategories as $cat)
                         <li wire:key="footer-category-{{ $cat['id'] }}">
-                            <a
-                                href="/ms/{{ $cat['slug'] }}"
+                            <a href="/ms/{{ $cat['slug'] }}"
                                 wire:navigate
-                                class="group inline-flex items-center gap-3 text-sm font-bold tracking-wide text-slate-300 transition-all duration-300 hover:text-red-500">
-
-                                <span class="h-1.5 w-1.5 rounded-full bg-slate-600 transition-all duration-300 group-hover:scale-125 group-hover:bg-red-500"></span>
-
-                                <span class="line-clamp-1">
-                                    {{ $cat['name'] }}
-                                </span>
+                                class="text-xs font-bold text-neutral-400 hover:text-white hover:underline transition-colors block truncate">
+                                {{ $cat['name'] }}
                             </a>
                         </li>
-
                         @empty
-                        <li class="text-sm text-slate-500">Categories unavailable.</li>
+                        <li class="text-xs text-neutral-500 font-normal">Categories unavailable.</li>
                         @endforelse
                     </ul>
                 </div>
 
-                {{-- META LINKS --}}
+                {{-- EDITORIAL META & COMPLIANCE LINKS --}}
                 <div class="lg:col-span-3">
-                    <div class="mb-7 flex items-center gap-3">
-                        <div class="h-6 w-1 rounded-full bg-orange-500"></div>
-                        <h3 class="text-sm font-black uppercase tracking-[0.25em] text-white">
+                    <div class="mb-5 border-b border-neutral-800 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-white">
                             {{ $this->footerSettings['information_title'] }}
                         </h3>
                     </div>
 
-                    <ul class="space-y-5">
+                    <ul class="space-y-3">
                         @forelse($this->metaLinks as $index => $link)
                         <li wire:key="footer-meta-{{ $index }}">
-                            <a
-                                href="{{ $link['url'] }}"
-                                class="group inline-flex items-center gap-3 text-sm font-medium text-slate-400 transition-all duration-300 hover:text-white"
-                                @if($link['open_in_new_tab'])
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                @endif>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                                <span class="line-clamp-1">
-                                    {{ $link['title'] }}
-                                </span>
+                            <a href="{{ $link['url'] }}"
+                                class="text-xs font-medium text-neutral-400 hover:text-white hover:underline block truncate"
+                                @if($link['open_in_new_tab']) target="_blank" rel="noopener noreferrer" @endif>
+                                {{ $link['title'] }}
                             </a>
                         </li>
                         @empty
-                        <li class="text-sm text-slate-500">Links unavailable.</li>
+                        <li class="text-xs text-neutral-500 font-normal">Links unavailable.</li>
                         @endforelse
                     </ul>
                 </div>
+
             </div>
 
-            {{-- FOOTER BOTTOM --}}
-            <div class="flex flex-col items-center justify-between gap-6 pt-8 md:flex-row">
+            {{-- COPYRIGHT & COMPLIANCE BAR --}}
+            <div class="flex flex-col items-start justify-between gap-6 pt-8 sm:flex-row sm:items-center">
+                
+                <div class="space-y-2">
+                    <p class="text-xs font-normal tracking-wide text-neutral-500">
+                        &copy; {{ $currentYear }} {{ $this->footerSettings['copyright_text'] ?? 'Lusweti Online Center' }}. All rights reserved.
+                    </p>
+                    <p class="text-[10px] leading-relaxed  text-neutral-600 max-w-2xl font-normal">
+                        The content of external sites is not the responsibility of this publication.
+                    </p>
+                </div>
 
-                {{-- COPYRIGHT --}}
-                <p class="text-center text-xs font-medium tracking-wide text-slate-500 md:text-left">
-                    © {{ $currentYear }} {{ $this->footerSettings['copyright_text'] ?? 'Lusweti Online Center' }}. All rights reserved.
-                </p>
+                <div class="flex-shrink-0 rounded-none bg-transparent text-neutral-400">
+                    <livewire:frontend.social-links />
+                </div>
 
-                {{-- SOCIAL LINKS --}}
-                <livewire:frontend.social-links/>
             </div>
+
         </div>
     </footer>
 </div>
