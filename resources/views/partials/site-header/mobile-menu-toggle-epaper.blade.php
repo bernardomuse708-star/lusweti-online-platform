@@ -1,19 +1,18 @@
-<div class="flex items-center gap-4 flex-1">
+<div class="flex items-center gap-4">
     <button @click="mobileMenuOpen = !mobileMenuOpen"
-        class="group p-2 text-gray-600 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 rounded-md transition-colors"
+        class="flex items-center gap-1.5 py-2 text-gray-900 hover:text-red-600 transition-colors focus:outline-none"
         aria-expanded="false">
-        <span class="sr-only">Toggle menu</span>
-        {{-- Hamburger Icon --}}
-        <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-        {{-- Close Icon --}}
-        <svg x-show="mobileMenuOpen" x-cloak class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        
+        <div class="w-5 h-5 flex flex-col justify-center gap-1">
+            <span class="h-0.5 w-5 bg-current transform transition duration-200" :class="mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''"></span>
+            <span class="h-0.5 w-5 bg-current transition duration-150" :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
+            <span class="h-0.5 w-5 bg-current transform transition duration-200" :class="mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''"></span>
+        </div>
+        {{-- <span class="text-xs font-bold uppercase tracking-wider hidden sm:inline">Menu</span> --}}        
     </button>
-
-    <a href="https://mwanaclick.com?utm_source=direct&utm_medium=service%20link" target="_blank" rel="noopener" class="hidden sm:block text-sm font-bold tracking-wide text-gray-500 hover:text-red-600 transition-colors">
+    
+    <div class="h-4 w-[1px] bg-gray-200 hidden sm:block"></div>
+    <a href="https://mwanaclick.com?utm_source=direct&utm_medium=service%20link" target="_blank" rel="noopener" class="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-red-600 transition-colors">
         ePaper
     </a>
 </div>

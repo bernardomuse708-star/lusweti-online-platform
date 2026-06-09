@@ -49,19 +49,22 @@ class Article extends Model implements HasMedia
     {
         // Consolidate triggers to avoid redundant websocket payload execution
         static::saved(function (Article $article) {
-            broadcast(new ArticlePublished($article))->toOthers();
+            // Only broadcast if not running in console (seeding)
+            if (!app()->runningInConsole()) {
+                broadcast(new ArticlePublished($article))->toOthers();
+            }
 
-            if ($article->external_url && $article->wasChanged('external_url')) {
-                if (app()->runningInConsole()) {
-                    ScrapeExternalArticleCover::dispatch($article->id);
-                } else {
-                    ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
-                }
+            // Disable external scraping during seeding
+            if ($article->external_url && $article->wasChanged('external_url') && !app()->runningInConsole()) {
+                ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
             }
         });
 
         static::deleted(function (Article $article) {
-            broadcast(new ArticlePublished($article))->toOthers();
+            // Only broadcast if not running in console (seeding)
+            if (!app()->runningInConsole()) {
+                broadcast(new ArticlePublished($article))->toOthers();
+            }
         });
     }
 
@@ -133,6 +136,43 @@ class Article extends Model implements HasMedia
         $query
             ->published()
             ->where('category_id', $categoryId);
+    }
+
+
+
+    /**
+     * Pro Full-Text Search Scope with Cover Density Ranking
+     */
+    public function scopeAdvancedSearch(Builder $query, ?string $term): Builder
+    {
+        if (blank($term)) {
+            return $query;
+        }
+
+        // 1. Clean terms & convert to Postgres tsquery formatting (e.g., 'habari & michezo:*')
+        $formattedTerm = collect(explode(' ', $term))
+            ->map(fn($word) => preg_replace('/[^A-Za-z0-9]/', '', $word))
+            ->filter()
+            ->map(fn($word) => "{$word}:*")
+            ->join(' & ');
+
+        if (empty($formattedTerm)) {
+            return $query;
+        }
+
+        // 2. Replicate the vectorized text mapping used in our GIN index
+        $vector = "
+            setweight(to_tsvector('simple', coalesce(title, '')), 'A') ||
+            setweight(to_tsvector('simple', coalesce(summary, '')), 'B') ||
+            setweight(to_tsvector('simple', coalesce(content, '')), 'C')
+        ";
+
+        // 3. Bind the tsquery parameters safely
+        return $query->whereRaw("({$vector}) @@ to_tsquery('simple', ?)", [$formattedTerm])
+            ->select('*')
+            // ts_rank_cd calculates relevance based on word proximity and frequency
+            ->selectRaw("ts_rank_cd(({$vector}), to_tsquery('simple', ?)) as relevance", [$formattedTerm])
+            ->orderBy('relevance', 'desc');
     }
 
     public function getFeaturedImageUrlAttribute(): ?string

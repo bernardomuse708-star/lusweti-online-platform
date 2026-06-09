@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Frontend;
 
-use App\Models\VideoCategory;
+use App\Models\Category;
 use App\Models\Video;
+use App\Models\PageSection;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -12,6 +13,16 @@ use Illuminate\Support\Collection;
 
 class VideoTeaserRow extends Component
 {
+    public ?PageSection $section = null;
+
+    public function mount(): void
+    {
+        // If section is provided, use its category
+        if ($this->section && $this->section->category) {
+            // Use section's category
+        }
+    }
+
     /**
      * Engineer-class realtime listener for video updates.
      * Listens to video broadcasts and re-renders when new videos are published.
@@ -24,9 +35,13 @@ class VideoTeaserRow extends Component
     }
 
     #[Computed]
-    public function category(): ?VideoCategory
+    public function category(): ?Category
     {
-        return VideoCategory::where('slug', 'video')
+        if ($this->section && $this->section->category) {
+            return $this->section->category;
+        }
+
+        return Category::where('slug', 'video')
             ->where('is_active', true)
             ->first();
     }

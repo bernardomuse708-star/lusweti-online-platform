@@ -1,189 +1,112 @@
 <div>
     @if($this->category)
 
-    <section
-        id="{{ $this->category->slug }}"
-        class="relative py-8 lg:py-12">
+    <section id="{{ $this->category->slug }}" class="w-full py-10 mx-auto bg-white text-slate-900 antialiased">
 
-        {{-- Section Header --}}
-        <div class="flex items-center justify-between mb-8 mx-auto max-w-7xl">
+        {{-- BBC EDITORIAL HEADER --}}
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 border-b-2 border-slate-900 pb-3 gap-4">
+            <div class="flex items-start gap-3">
+                {{-- Flat Geometric Color Indicator --}}
+                <div class="w-3 h-8 shrink-0 rounded-none block"
+                    style="background-color: {{ $this->category->bg_color }}">
+                </div>
 
-            <div class="flex items-center gap-4">
-
-                <div
-                    class="w-2 h-12 rounded-full"
-                    style="background-color: {{ $this->category->bg_color }}"></div>
-
-                <div>
-                    <h2
-                        class="text-2xl lg:text-4xl text-yellow-600 font-black tracking-tight ">
+                <div class="space-y-1">
+                    <h2 class="text-2xl lg:text-3xl font-black tracking-tight text-neutral-900 uppercase">
                         {{ $this->category->name }}
                     </h2>
-{{-- style="color: {{ $this->category->text_color }}" --}}
-                    <p class="text-sm text-slate-500">
+                    <p class="text-xs font-normal text-neutral-500">
                         Watch the latest videos and featured coverage
                     </p>
                 </div>
-
             </div>
 
-            <a
-                href="/ms/{{ $this->category->slug }}"
+            <a href="/ms/{{ $this->category->slug }}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="hidden md:flex items-center gap-2 text-sm font-semibold text-red-600 hover:text-red-700">
+                class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors">
                 View All Videos
-
-                <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-
+                <span class="text-sm font-normal">&rarr;</span>
             </a>
-
         </div>
 
-        {{-- Video Grid --}}
-        <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 mx-auto max-w-7xl">
+        {{-- WIDESCREEN VIDEO GRID --}}
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 ">
 
             @foreach($this->collectionItems as $video)
+            <article wire:key="video-teaser-{{ $video->id }}" class="group bg-white border border-neutral-200 rounded-none shadow-none text-neutral-900 flex flex-col">
 
-            <article
-                wire:key="video-teaser-{{ $video->id }}"
-                class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-red-300 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-
-                <a
-                    href="/ms/{{ $this->category->slug }}/{{ $video->slug }}"
+                <a href="/ms/{{ $this->category->slug }}/{{ $video->slug }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="block h-full">
+                    class="block h-full bg-transparent">
 
-                    {{-- Thumbnail --}}
-                    <div class="relative overflow-hidden h-56 bg-slate-900">
+                    {{-- Media Frame: Hard Edged Widescreen Box --}}
+                    <div class="relative aspect-video w-full overflow-hidden bg-slate-900 rounded-none mb-3">
 
                         @if($video->is_youtube)
-                            {{-- Render Widescreen YouTube Embed / Cover --}}
-                            <img
-                                src="https://i.ytimg.com/vi/{{ $video->youtube_id }}/maxresdefault.jpg"
-                                alt="{{ $video->title }}"
-                                loading="lazy"
-                                class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        <img src="https://i.ytimg.com/vi/{{ $video->youtube_id }}/maxresdefault.jpg"
+                            alt="{{ $video->title }}"
+                            loading="lazy"
+                            class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-101">
                         @else
-                            {{-- Render Local Progressive Stream HTML5 Asset Preview --}}
-                            <video 
-                                src="{{ $video->video_url }}" 
-                                preload="metadata" 
-                                autoplay 
-                                loop 
-                                muted 
-                                playsinline
-                                class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
-                            </video>
+                        <video src="{{ $video->video_url }}"
+                            preload="metadata"
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-101">
+                        </video>
                         @endif
 
-                        {{-- Dark Overlay --}}
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none"></div>
-
-                        {{-- Play Button --}}
-                        <div
-                            class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div
-                                class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-xl transition duration-500 group-hover:scale-110">
-                                <svg
-                                    class="w-7 h-7 text-red-600 ml-1"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z" />
-                                </svg>
-                            </div>
+                        {{-- Minimalist Fixed Play Overlay Indicator --}}
+                        <div class="absolute bottom-0 left-0 bg-slate-900/90 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 flex items-center gap-1.5">
+                            <svg class="w-3 h-3 fill-current text-red-600" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                            <span>Video</span>
                         </div>
 
-                        {{-- Category Badge --}}
-                        <div
-                            class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold">
-                            {{ $this->category->name }}
-                        </div>
-
-                        {{-- Date --}}
-                        <div
-                            class="absolute bottom-4 right-4 px-2 py-1 rounded-lg bg-black/70 text-white text-xs">
+                        {{-- Structural Timestamp Label --}}
+                        <div class="absolute bottom-0 right-0 bg-slate-950/70 text-white text-[10px] font-bold px-2 py-1.5">
                             {{ $video->published_at->isoFormat('MMM D') }}
                         </div>
 
                     </div>
 
-                    {{-- Content --}}
-                    <div class="p-5 flex flex-col min-h-[180px]">
+                    {{-- Metadata & Headline Stack --}}
+                    <div class="space-y-1">
 
-                        <h3
-                            class="font-bold text-slate-900 text-lg leading-snug line-clamp-3 group-hover:text-red-600 transition">
+                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="text-red-600 font-extrabold">{{ $this->category->name }}</span>
+                        </div>
+
+                        <h3 class="text-base font-bold leading-snug text-slate-900 group-hover:underline tracking-tight line-clamp-3">
                             {{ $video->title }}
                         </h3>
-
-                        <div class="mt-auto pt-5">
-
-                            <span
-                                class="inline-flex items-center gap-2 text-red-600 font-semibold text-sm">
-                                Watch Video
-
-                                <svg
-                                    class="w-4 h-4 transition-transform group-hover:translate-x-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-
-                            </span>
-
-                        </div>
 
                     </div>
 
                 </a>
-
             </article>
-
             @endforeach
 
         </div>
 
-        {{-- Mobile CTA --}}
-        <div class="mt-8 text-center md:hidden">
-
-            <a
-                href="/ms/{{ $this->category->slug }}"
+        {{-- MOBILE CTA SECTION --}}
+        <div class="mt-8 px-4 text-center md:hidden">
+            <a href="/ms/{{ $this->category->slug }}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 text-white font-semibold">
-                View All Videos
-
-                <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-
+                class="block w-full py-3 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors hover:bg-slate-800">
+                View All Videos &rarr;
             </a>
+        </div>
 
+        {{-- FLAT EDITORIAL AD WRAPPER Advertisement--}}
+        <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent">
+            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block"></span>
         </div>
 
     </section>

@@ -4,6 +4,7 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\PageSection;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On; // <-- Import the On attribute
@@ -11,11 +12,17 @@ use Livewire\Component;
 
 class HadithiRow extends Component
 {
+    public ?PageSection $section = null;
+
     // Remove the old protected $listeners array entirely.
 
     #[Computed]
     public function category(): ?Category
     {
+        if ($this->section && $this->section->category) {
+            return $this->section->category;
+        }
+
         return Category::query()
             ->where('slug', 'hadithi')
             ->where('is_active', true)

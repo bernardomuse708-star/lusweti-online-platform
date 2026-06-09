@@ -1,39 +1,38 @@
+{{-- master-header.blade.php --}}
 <div>
-    <div>
-    <header x-data="{ mobileMenuOpen: false, accountMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white font-sans shadow-sm">
+    <header x-data="{ mobileMenuOpen: false, accountMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white font-sans border-b border-gray-200">
 
-        {{-- News Update Banner (Top) --}}
-        @include('partials.site-header.news-update', ['showDemo' => false])
+        {{-- News Update Banner / Top Marquee 
+        @include('partials.site-header.news-update', ['showDemo' => false])--}}        
 
-        {{-- 1. BREAKING NEWS TICKER --}}
-        <livewire:frontend.breaking-news />
+        {{-- Main Navigation Bar (BBC Content Grid) --}}
+        <div class="max-w-7xl mx-auto  relative z-40 bg-white">
+            <div class="flex h-14 sm:h-16 items-center justify-between border-b border-gray-100">
 
-        {{-- 2. FEATURED BREAKING NEWS (Only on Desktop) 
-        <!-- @include('partials.site-header.featured-breaking-news', ['showDemo' => false]) -->--}}
+                {{-- Left Section: Mobile Toggle & ePaper --}}
+                <div class="flex items-center gap-4 flex-1">
+                    @include('partials.site-header.mobile-menu-toggle-epaper', ['showDemo' => false])
+                </div>
 
-        {{-- Main Navigation Bar --}}
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-40 bg-white">
-            <div class="flex h-16 sm:h-20 items-center justify-between">
-                {{-- Left Section: Mobile Menu Toggle & ePaper --}}
-                @include('partials.site-header.mobile-menu-toggle-epaper', ['showDemo' => false])
-                {{-- Center Section: Logo --}}
-                @include('partials.site-header.center-logo', ['showDemo' => false])
-                {{-- Right Section: Search & Account --}}
-                @include('partials.site-header.login_search_buttons', ['showDemo' => false])
+                {{-- Center Section: Distinct Clean Logo --}}
+                <div class="flex justify-center flex-shrink-0 px-4">
+                    @include('partials.site-header.center-logo', ['showDemo' => false])
+                </div>
+
+                {{-- Right Section: Account, Subscribe & Search Controls --}}
+                <div class="flex items-center justify-end flex-1">
+                    @include('partials.site-header.login_search_buttons', ['showDemo' => false])
+                </div>
 
             </div>
-        </div>
+        </div>       
 
-        {{-- Sub Navigation (Categories Carousel) --}}
-        @include('partials.site-header.site-header-sub-navbar', ['showDemo' => false])
-
-
-        {{-- Mega Menu (Dropdown) --}}
-        @include('partials.site-header.mega-menu-dropdown', ['showDemo' => false])
+        {{-- Main Category Bar (BBC Sharp Box Layout) --}}
+        @include('partials.site-header.category-bar', ['showDemo' => false])
 
 
+        {{-- Breaking News Ticker --}}
+        <livewire:frontend.breaking-news />
 
     </header>
-    </div>
-
 </div>

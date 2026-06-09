@@ -1,57 +1,56 @@
-<div class="">
+<div>
     @if($this->category)
-    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section class=" py-10 text-slate-900 antialiased  bg-white">
 
-        <!-- Section Header: Refined Hierarchy -->
-        <div class="mb-10 flex items-center justify-between border-b border-gray-100 pb-6 ">
-            <div class="flex items-center gap-4">
+        {{-- BBC EDITORIAL HEADER --}}
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between border-b-2 border-slate-900 pb-3 gap-4">
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4">
                 <a href="/ms/{{ $this->category->slug }}"
                     wire:navigate
-                    class="inline-flex items-center rounded-lg px-4 py-1.5 text-xs font-black uppercase tracking-widest shadow-sm"
-                    style="background-color: {{ $this->category->bg_color }}; color: {{ $this->category->text_color }};">
+                    class="inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-none"
+                    style="background-color: {{ $this->category->bg_color ?? '#111827' }}; color: {{ $this->category->text_color ?? '#ffffff' }};">
                     {{ $this->category->name }}
                 </a>
-                <span class="h-4 w-[1px] bg-slate-200"></span>
-                <span class="text-sm font-medium text-slate-500">Latest Updates</span>
+                <span class="h-4 w-[1px] bg-slate-300 hidden sm:inline"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Latest Updates</span>
             </div>
+            
             <a href="/ms/{{ $this->category->slug }}"
                 wire:navigate
-                class="group flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-red-600">
+                class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors">
                 See All
-                <svg class="h-3 w-3 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                </svg>
+                <span class="text-sm font-normal">&rarr;</span>
             </a>
         </div>
-        {{-- <!-- Main Grid --> --}}
 
-        <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 max-w-7xl mx-auto">
+        {{-- MAIN THREE-COLUMN EDITORIAL GRID --}}
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">
 
-
-
-            {{-- <!-- Column 1: Featured Story (Focus Area) --> --}}
-            <div class="lg:col-span-4">
+            {{-- COLUMN 1: LEAD FEATURED STORY --}}
+            <div class="lg:col-span-4 border-b border-slate-200 pb-6 lg:border-b-0 lg:pb-0">
                 @if($this->columnLayouts['featured'])
                 @php $featuredItem = $this->columnLayouts['featured']; @endphp
                 <a href="/ms/{{ $this->category->slug }}/{{ $featuredItem->slug }}"
                     wire:navigate
                     wire:key="hadithi-featured-{{ $featuredItem->id }}"
-                    class="group block h-full space-y-4">
+                    class="group block space-y-3.5">
 
-                    <div class="relative overflow-hidden rounded-2xl bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-lg">
+                    <div class="relative overflow-hidden rounded-none bg-slate-100 aspect-video">
                         @php
                             $imageUrl = $featuredItem->featured_image_url ?? asset('images/placeholders/article-default.jpg');
                         @endphp
-                        <img src="{{ $imageUrl }}" alt="{{ $featuredItem->title }}" loading="lazy"
-                            class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <img src="{{ $imageUrl }}" 
+                            alt="{{ $featuredItem->title }}" 
+                            loading="lazy"
+                            class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-101">
                     </div>
 
                     <div class="space-y-2">
-                        <h3 class="text-xl font-black leading-tight text-slate-900 transition-colors group-hover:text-red-600">
+                        <h3 class="text-xl font-extrabold leading-tight tracking-tight text-slate-950 group-hover:underline decoration-1">
                             {{ $featuredItem->title }}
                         </h3>
                         @if($featuredItem->summary)
-                        <p class="text-sm leading-relaxed text-slate-600 line-clamp-3">
+                        <p class="text-sm leading-relaxed text-slate-600 line-clamp-3 font-normal">
                             {{ $featuredItem->summary }}
                         </p>
                         @endif
@@ -60,15 +59,15 @@
                 @endif
             </div>
 
-
-            {{-- --}}
-            <div class="lg:col-span-4 space-y-6">
+            {{-- COLUMN 2: SECONDARY ROW STACK WITH THUMBNAILS --}}
+            <div class="lg:col-span-4 border-b border-slate-200 pb-6 lg:border-b-0 lg:pb-0 space-y-4">
                 @foreach($this->columnLayouts['thumbnails'] as $thumbItem)
                 <a href="/ms/{{ $this->category->slug }}/{{ $thumbItem->slug }}"
                     wire:navigate
                     wire:key="hadithi-thumbnail-{{ $thumbItem->id }}"
-                    class="group flex gap-4 border-b border-slate-100 pb-6 last:border-0 last:pb-0 transition-opacity hover:opacity-80">
-                    <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                    class="group flex gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0 items-start">
+                    
+                    <div class="h-16 w-24 flex-shrink-0 overflow-hidden rounded-none bg-slate-100 aspect-video">
                         @php
                             $thumbImageUrl = $thumbItem->featured_image_thumb_url ?? asset('images/placeholders/article-default.jpg');
                         @endphp
@@ -76,11 +75,12 @@
                             class="h-full w-full object-cover"
                             alt="{{ $thumbItem->title }}">
                     </div>
-                    <div class="flex flex-col justify-center">
-                        <h3 class="text-sm font-bold leading-snug text-slate-900">
+
+                    <div class="space-y-1 min-w-0">
+                        <h3 class="text-sm font-bold leading-snug text-slate-950 group-hover:underline line-clamp-2">
                             {{ $thumbItem->title }}
                         </h3>
-                        <p class="mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                             {{ $thumbItem->published_at->diffForHumans() }}
                         </p>
                     </div>
@@ -88,14 +88,13 @@
                 @endforeach
             </div>
 
-
-            {{-- <!-- Column 3: Text Only (Scannability) -->    --}}
-            <div class="lg:col-span-4 space-y-6">
+            {{-- COLUMN 3: SCANNABLE TEXT-ONLY STACK --}}
+            <div class="lg:col-span-4 space-y-4">
                 @foreach($this->columnLayouts['textOnly'] as $textItem)
                 <a href="/ms/{{ $this->category->slug }}/{{ $textItem->slug }}"
                     wire:navigate
-                    class="group block border-l-2 border-slate-200 pl-4 transition-all hover:border-red-600">
-                    <h3 class="text-sm font-semibold leading-relaxed text-slate-700 transition-colors group-hover:text-red-600">
+                    class="group block border-l-2 border-slate-200 pl-4 transition-colors hover:border-slate-900">
+                    <h3 class="text-sm font-bold leading-snug text-slate-800 group-hover:text-slate-950 group-hover:underline line-clamp-2">
                         {{ $textItem->title }}
                     </h3>
                     <p class="mt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -107,10 +106,9 @@
 
         </div>
 
-
-        {{-- Ad Wrapper (Optimized)  --}}
-        <div class="mt-12 rounded-xl bg-slate-50 border border-slate-100 p-4 text-center">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Advertisement</span>
+        {{-- FLAT EDITORIAL AD WRAPPER Advertisement--}}
+        <div class="mt-12 border-t border-b border-slate-200 py-3 text-center rounded-none bg-transparent">
+            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block"></span>
         </div>
 
     </section>

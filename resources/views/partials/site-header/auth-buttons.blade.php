@@ -1,8 +1,8 @@
-{{-- RIGHT SECTION --}}
+{{-- RIGHT SECTION    {{ route('blog.all-projects') }} --}}
 <div class="flex items-center gap-4">
     {{-- SEARCH --}}
     <div class="hidden md:block">
-        <form action="{{ route('blog.all-projects') }}"  method="GET" class="m-0 p-0">
+        <form action=""  method="GET" class="m-0 p-0">
             <input type="text"
                 name="search"
                 value="{{ request('search') }}"

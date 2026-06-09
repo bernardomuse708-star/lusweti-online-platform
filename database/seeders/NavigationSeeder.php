@@ -14,7 +14,6 @@ class NavigationSeeder extends Seeder
     {
         $now = now();
 
-        // 1. Prepare raw array data for ultra-fast single bulk insert
         $categories = [
             ['name' => 'Soka', 'slug' => 'soka', 'sort_order' => 1, 'is_visible_in_nav' => true, 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'Burudani', 'slug' => 'burudani', 'sort_order' => 2, 'is_visible_in_nav' => true, 'created_at' => $now, 'updated_at' => $now],
@@ -27,18 +26,24 @@ class NavigationSeeder extends Seeder
             ['name' => 'Picha', 'slug' => 'picha', 'sort_order' => 9, 'is_visible_in_nav' => false, 'created_at' => $now, 'updated_at' => $now],
         ];
 
-        // Executes exactly 1 INSERT query instead of 9
-        Category::insert($categories);
+        // 1. USE UPSERT: This keeps the speed of bulk insert but prevents duplicate errors
+        Category::upsert(
+            $categories, 
+            ['slug'], // The unique column(s) used to detect if the row exists
+            ['name', 'sort_order', 'is_visible_in_nav', 'updated_at'] // The columns to update if it exists
+        );
 
-        // Seed a default baseline Breaking News alert
-        News::create([
-            'headline' => 'Taifa Stars Yafuzu Michuano ya AFCON!',
-            'slug' => Str::slug('Taifa Stars Yafuzu Michuano ya AFCON'),
-            'url' => '/ms/soka/taifa-stars-yafuzu',
-            'is_breaking' => true,
-        ]);
+        // 2. USE UPDATEORCREATE: News::create will also fail on subsequent runs
+        News::updateOrCreate(
+            ['slug' => Str::slug('Taifa Stars Yafuzu Michuano ya AFCON')],
+            [
+                'headline' => 'Taifa Stars Yafuzu Michuano ya AFCON!',
+                'url' => '/ms/soka/taifa-stars-yafuzu',
+                'is_breaking' => true,
+            ]
+        );
 
-        // 2. Clear out any stale navigation cache immediately
+        // 3. Clear cache
         Cache::forget('header-navigation-categories');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Category;
 use App\Models\Gallery;
+use App\Models\PageSection;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
@@ -12,15 +13,22 @@ use Livewire\Component;
 class PichaTeaserRow extends Component
 {
     public ?Category $category = null;
+    public ?PageSection $section = null;
 
     public Collection $collectionItems;
 
     public function mount(): void
     {
-        $this->category = Category::query()
-            ->where('slug', 'picha')
-            ->where('is_active', true)
-            ->first();
+        // If section is provided, use its category
+        if ($this->section && $this->section->category) {
+            $this->category = $this->section->category;
+        } else {
+            // Fallback to picha category
+            $this->category = Category::query()
+                ->where('slug', 'picha')
+                ->where('is_active', true)
+                ->first();
+        }
 
         $this->loadGallaries();
     }

@@ -9,6 +9,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Page-specific meta overrides --}}
     @yield('meta')
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body class="antialiased">
@@ -18,13 +23,13 @@
     <main>
         @yield('content')
     </main>
-    {{-- Authentication Modals --}}
-    <x-modals.login-modal />
+
     <livewire:frontend.global-page-footer />
+
+    {{-- Authentication Modals --}}
+    <livewire:auth.auth-modal />
     @livewireScripts
     @stack('scripts')
-
-    
 
 </body>
 

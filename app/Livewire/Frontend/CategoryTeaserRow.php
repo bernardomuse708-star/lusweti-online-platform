@@ -4,16 +4,28 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Category;
 use App\Models\Article;
+use App\Models\PageSection;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 
 class CategoryTeaserRow extends Component
 {
-    public string $categorySlug;
+    public ?string $categorySlug = null;
+    public ?PageSection $section = null;
+
+    public function mount(): void
+    {
+        // If section is provided, extract categorySlug from it
+        if ($this->section && $this->section->category) {
+            $this->categorySlug = $this->section->category->slug;
+        }
+    }
 
     // Cache properties directly into memory per render cycle to eliminate N+1 vulnerabilities
     public function getCategoryProperty(): ?Category
     {
+        if (!$this->categorySlug) return null;
+
         return Category::where('slug', $this->categorySlug)
             ->where('is_active', true)
             ->first();

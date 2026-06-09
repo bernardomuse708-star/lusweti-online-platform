@@ -1,117 +1,110 @@
-{{-- BREAKING NEWS SECTION WITH FEATURED IMAGE & TICKER --}}
-<div class="">
+{{-- BREAKING NEWS SECTION WITH FEATURED IMAGE & TICKER (BBC Editorial Layout) --}}
+<div class="w-full bg-white rounded-none">
     @if($this->hasBreaking())
         {{-- FEATURED CARD (Primary Breaking News Item) --}}
         @php
-        $featuredItem = $breakingItems?->first();
-        $isUrgent = $featuredItem?->is_urgent ?? false;
-        $isLive = $featuredItem?->is_live ?? false;
+            $featuredItem = $breakingItems?->first();
+            $isUrgent = $featuredItem?->is_urgent ?? false;
+            $isLive = $featuredItem?->is_live ?? false;
         @endphp
 
         @if($featuredItem)
-        <div class="bg-gradient-to-r from-red-600 to-red-700 text-white border-b-4 border-red-900 shadow-2xl">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div class="flex items-start gap-6">
-                    {{-- Featured Image --}}
+        <div class="bg-red-700 text-white border-b-2 border-red-900 rounded-none shadow-none">
+            <div class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex flex-col sm:flex-row items-start gap-6">
+                    
+                    {{-- FLAT IMAGERY MEDIA ASSET --}}
                     @if($featuredItem->image_url)
-                    <div class="shrink-0 w-32 h-32 rounded-lg overflow-hidden shadow-lg border-4 border-white/20">
-                        <img
-                            src="{{ $featuredItem->image_url }}"
-                            alt="{{ $featuredItem->title }}"
-                            loading="lazy"
-                            class="w-full h-full object-cover">
+                    <div class="shrink-0 w-full sm:w-36 h-36 bg-neutral-900 border border-white/20 rounded-none overflow-hidden relative">
+                        <img src="{{ $featuredItem->image_url }}"
+                             alt="{{ $featuredItem->title }}"
+                             loading="lazy"
+                             class="w-full h-full object-cover rounded-none block">
                     </div>
                     @endif
 
-                    {{-- Content --}}
+                    {{-- TEXT COMPOSITION ENGINE --}}
                     <div class="flex-1 min-w-0">
-                        {{-- Badges --}}
-                        <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        {{-- STARK METADATA BADGE MATRIX --}}
+                        <div class="flex items-center gap-2 mb-2.5 flex-wrap">
                             @if($isUrgent)
-                            <span class="inline-block px-3 py-1 bg-red-900 text-white text-xs font-bold rounded-full uppercase tracking-wider">
-                                🚨 URGENT
+                            <span class="inline-block px-2 py-0.5 bg-neutral-950 text-white text-[10px] font-black uppercase tracking-widest rounded-none">
+                                Urgent
                             </span>
                             @endif
 
                             @if($isLive)
-                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-yellow-400 text-red-900 text-xs font-bold rounded-full uppercase tracking-wider">
-                                <span class="relative flex h-2 w-2">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                                </span>
-                                LIVE
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-white text-red-700 text-[10px] font-black uppercase tracking-widest rounded-none">
+                                <span class="w-1.5 h-1.5 bg-red-600 rounded-none block animate-pulse" aria-hidden="true"></span>
+                                <span>Live</span>
                             </span>
                             @endif
 
-                            <span class="text-xs text-red-100">
+                            <time class="text-[11px] font-bold text-red-100 uppercase tracking-wider">
                                 {{ $featuredItem->created_at?->diffForHumans() ?? 'Recently' }}
-                            </span>
+                            </time>
                         </div>
 
-                        {{-- Title --}}
-                        <h2 class="text-2xl lg:text-3xl font-black text-white mb-4 line-clamp-3">
-                            {{ $featuredItem->display_title }}
+                        {{-- EDITORIAL HERO TITLE --}}
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight mb-4">
+                            @php
+                                $isInternal = str_starts_with($featuredItem->url, config('app.url'));
+                            @endphp
+                            <a href="{{ $featuredItem->url }}" 
+                               @if($isInternal) wire:navigate @else target="_blank" rel="noopener noreferrer" @endif
+                               class="hover:underline transition-none">
+                                {{ $featuredItem->display_title }}
+                            </a>
                         </h2>
 
-                        {{-- CTA Button --}}
-                        @php
-                        $isInternal = str_starts_with($featuredItem->url, config('app.url'));
-                        @endphp
-
-                        <a
-                            href="{{ $featuredItem->url }}"
-                            @if($isInternal) wire:navigate @else target="_blank" rel="noopener noreferrer" @endif
-                            wire:click="trackClick({{ $featuredItem->id }})"
-                            class="inline-flex items-center gap-2 px-6 py-3 bg-white text-red-600 font-bold rounded-lg hover:bg-red-50 transition-all duration-300 shadow-lg hover:shadow-xl">
-                            Read Full Story
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        {{-- GEOMETRIC BLOCK BUTTON INTERACTIVE --}}
+                        <a href="{{ $featuredItem->url }}"
+                           @if($isInternal) wire:navigate @else target="_blank" rel="noopener noreferrer" @endif
+                           wire:click="trackClick({{ $featuredItem->id }})"
+                           class="inline-flex items-center gap-1.5 px-4 py-2 bg-neutral-950 text-white text-xs font-black uppercase tracking-wider rounded-none border border-neutral-900 hover:bg-neutral-900 transition-none focus:outline-none focus:ring-1 focus:ring-white">
+                            <span>Read Full Story</span>
+                            <svg class="w-3 h-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </a>
                     </div>
+
                 </div>
             </div>
         </div>
         @endif
 
-        {{-- SCROLLING TICKER (All Items) --}}
+        {{-- LOWER CRAWL TICKER BANNER (All Secondary Items) --}}
         <div wire:key="breaking-ticker"
-            x-data
-            class="bg-red-600 text-white text-sm font-semibold flex items-center overflow-hidden border-b border-black/10">
+             x-data
+             class="bg-neutral-950 text-white text-sm font-bold flex items-center overflow-hidden border-b border-neutral-900 rounded-none">
 
-            {{-- Static Label --}}
-            <div class="px-4 py-2 bg-white uppercase tracking-wider shrink-0 shadow-lg z-10">
-                <p class="text-red-600 flex items-center gap-2">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                    </span>
-                    More News
-                </p>
+            {{-- HIGH-CONTRAST STATIC BLOCK LABEL --}}
+            <div class="px-4 py-2.5 bg-red-600 text-white uppercase tracking-widest font-black shrink-0 z-20 flex items-center gap-2 rounded-none border-r border-red-700">
+                <span class="w-1.5 h-1.5 bg-white rounded-none block" aria-hidden="true"></span>
+                <span>More News</span>
             </div>
 
-            {{-- Scrolling Area --}}
-            <div class="flex-1 overflow-hidden whitespace-nowrap">
-                <div class="flex animate-ticker hover:[animation-play-state:paused] w-max min-w-full">
+            {{-- SCROLLING RUNNING TRACK --}}
+            <div class="flex-1 overflow-hidden whitespace-nowrap flex items-center relative z-10 py-1.5">
+                <div class="flex animate-ticker hover:[animation-play-state:paused] w-max min-w-full items-center">
                     @for ($i = 0; $i < 10; $i++)
-                        <div class="flex items-center gap-8 px-4">
+                    <div class="flex items-center gap-12 px-6">
                         @foreach ($breakingItems as $item)
-                        {{-- Skip featured item in ticker --}}
+                        {{-- Skip featured item in runner row --}}
                         @if($item->id !== $featuredItem?->id ?? null)
-                        <div class="flex items-center gap-2" wire:key="breaking-{{ $item->id }}-{{ $i }}">
-                            <button class="py-3 px-1.5">
-                                <span class="text-white-300 text-md opacity-70 py-2 px-1.5">•</span>
-                            </button>
-
-                            @php
+                        
+                        @php
                             $isInternal = str_starts_with($item->url, config('app.url'));
-                            @endphp
+                        @endphp
 
-                            <a
-                                href="{{ $item->url }}"
-                                @if($isInternal) wire:navigate.hover @else target="_blank" rel="noopener noreferrer" @endif
-                                wire:click="trackClick({{ $item->id }})"
-                                class="hover:text-yellow-300 transition-colors uppercase tracking-tight truncate">
+                        <div class="flex items-center gap-2" wire:key="breaking-{{ $item->id }}-{{ $i }}">
+                            <span class="text-red-500 font-black select-none text-sm" aria-hidden="true">•</span>
+
+                            <a href="{{ $item->url }}"
+                               @if($isInternal) wire:navigate.hover @else target="_blank" rel="noopener noreferrer" @endif
+                               wire:click="trackClick({{ $item->id }})"
+                               class="text-neutral-200 hover:text-white font-extrabold tracking-tight uppercase text-xs hover:underline transition-none truncate">
                                 {{ $item->display_title }}
                             </a>
                         </div>
@@ -121,7 +114,7 @@
                     @endfor
                 </div>
             </div>
+
         </div>
-    </div>
     @endif
 </div>
