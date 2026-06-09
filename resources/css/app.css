@@ -12,6 +12,9 @@
 }
 
 
+/* BBC CSS */
+
+
 /* BREAKING NEWS TICKER */
 
 @keyframes ticker {
@@ -42,4 +45,11 @@
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+
+/* login  */
+
+[x-cloak] {
+    display: none !important;
 }

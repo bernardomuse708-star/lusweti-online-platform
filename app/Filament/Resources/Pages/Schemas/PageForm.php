@@ -7,6 +7,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\TextInput as FormsTextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
@@ -137,6 +139,23 @@ class PageForm
 
                                     DateTimePicker::make('published_at')
                                         ->seconds(false),
+                                ]),
+
+                            Section::make('Navigation')
+                                ->description('Control how this page appears in the main navigation')
+                                ->columns(2)
+                                ->schema([
+
+                                    Toggle::make('is_visible_in_nav')
+                                        ->label('Show in Main Navigation')
+                                        ->default(true)
+                                        ->columnSpan(1),
+
+                                    TextInput::make('sort_order')
+                                        ->label('Navigation Order')
+                                        ->numeric()
+                                        ->default(0)
+                                        ->columnSpan(1),
                                 ]),
                         ]),
                 ]),

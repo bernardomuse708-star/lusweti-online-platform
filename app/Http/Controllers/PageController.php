@@ -3,13 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Page;
 use App\Models\Stream;
 
 class PageController extends Controller
 {
     public function home()
     {
-        return view('pages.home');
+        $page = Page::where('slug', 'nyumbani')->firstOrFail();
+
+        return view('preview.page', compact('page'));
+    }
+
+    public function michezo()
+    {
+        $page = Page::where('slug', 'michezo')->firstOrFail();
+
+        return view('preview.page', compact('page'));
+    }
+
+    public function burudani()
+    {
+        $page = Page::where('slug', 'burudani')->firstOrFail();
+
+        return view('preview.page', compact('page'));
     }
 
     public function stream()

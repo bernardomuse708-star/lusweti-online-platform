@@ -4,6 +4,7 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Category;
 use App\Models\Article;
+use App\Models\PageSection;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -12,9 +13,15 @@ use Illuminate\Support\Collection;
 
 class SpotiKenyaTeaserRow extends Component
 {
-    // protected $listeners = [
-    //     'echo:news,article.published' => '$refresh',
-    // ];
+    public ?PageSection $section = null;
+
+    public function mount(): void
+    {
+        // If section is provided, use its category
+        if ($this->section && $this->section->category) {
+            // Use section's category
+        }
+    }
 
     /**
      * Look-up and memory reference category layout settings context
@@ -22,6 +29,10 @@ class SpotiKenyaTeaserRow extends Component
     #[Computed]
     public function category(): ?Category
     {
+        if ($this->section && $this->section->category) {
+            return $this->section->category;
+        }
+
         return Category::where('slug', 'spoti-kenya')
             ->where('is_active', true)
             ->first();

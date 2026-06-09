@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
@@ -31,6 +32,12 @@ class PagesTable
             TextColumn::make('sections_count')
                 ->counts('sections')
                 ->badge(),
+
+            ToggleColumn::make('is_visible_in_nav')
+                ->label('Nav'),
+
+            TextColumn::make('sort_order')
+                ->sortable(),
 
             TextColumn::make('status')
                 ->badge()

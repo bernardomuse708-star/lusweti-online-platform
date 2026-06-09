@@ -49,19 +49,22 @@ class Article extends Model implements HasMedia
     {
         // Consolidate triggers to avoid redundant websocket payload execution
         static::saved(function (Article $article) {
-            broadcast(new ArticlePublished($article))->toOthers();
+            // Only broadcast if not running in console (seeding)
+            if (!app()->runningInConsole()) {
+                broadcast(new ArticlePublished($article))->toOthers();
+            }
 
-            if ($article->external_url && $article->wasChanged('external_url')) {
-                if (app()->runningInConsole()) {
-                    ScrapeExternalArticleCover::dispatch($article->id);
-                } else {
-                    ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
-                }
+            // Disable external scraping during seeding
+            if ($article->external_url && $article->wasChanged('external_url') && !app()->runningInConsole()) {
+                ScrapeExternalArticleCover::dispatchAfterResponse($article->id);
             }
         });
 
         static::deleted(function (Article $article) {
-            broadcast(new ArticlePublished($article))->toOthers();
+            // Only broadcast if not running in console (seeding)
+            if (!app()->runningInConsole()) {
+                broadcast(new ArticlePublished($article))->toOthers();
+            }
         });
     }
 

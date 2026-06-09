@@ -1,7 +1,7 @@
 
 {{-- resources/views/components/navbar-actions.blade.php --}}
-<div class="flex items-center h-full">
-    
+
+<div class="flex items-center h-full">    
     {{-- 1. Desktop Search (BBC Flat Block Style) --}}
     <div class="hidden lg:block border-r border-gray-300 h-full py-3 pr-4">
         <form action="/ms/search" method="GET" class="m-0 p-0 relative h-full flex items-center">
@@ -98,12 +98,6 @@
 
     </div>
 </div>
-
-
-
-
-
-
 
 <div class="flex items-center h-full">
     {{-- Inline Search for Desktop (Flat Block style) --}}

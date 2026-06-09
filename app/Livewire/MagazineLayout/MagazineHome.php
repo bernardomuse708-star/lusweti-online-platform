@@ -6,6 +6,7 @@ namespace App\Livewire\MagazineLayout;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Video;
+use App\Models\PageSection;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Contracts\View\View;
@@ -16,6 +17,7 @@ class MagazineHome extends Component
     use WithPagination;
 
     // Public properties mapped to $this-> in the Blade template
+    public ?PageSection $section = null;
     public ?Category $category = null;
     public array $columnLayouts = [];
 

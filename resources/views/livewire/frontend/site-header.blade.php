@@ -6,7 +6,7 @@
         @include('partials.site-header.news-update', ['showDemo' => false])--}}        
 
         {{-- Main Navigation Bar (BBC Content Grid) --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-40 bg-white">
+        <div class="max-w-7xl mx-auto  relative z-40 bg-white">
             <div class="flex h-14 sm:h-16 items-center justify-between border-b border-gray-100">
 
                 {{-- Left Section: Mobile Toggle & ePaper --}}
@@ -21,7 +21,6 @@
 
                 {{-- Right Section: Account, Subscribe & Search Controls --}}
                 <div class="flex items-center justify-end flex-1">
-
                     @include('partials.site-header.login_search_buttons', ['showDemo' => false])
                 </div>
 

@@ -39,6 +39,19 @@ return new class extends Migration
                 'gallery',
                 'video',
                 'burudani',
+                'magazine',
+                'spoti-kenya',
+                'spoti-majuu',
+                'three-column',
+                'news',
+                'burudani',
+                'global',
+                'kolamu',
+                'hadithi',
+                'breaking',
+                'external',
+                
+
             ]);
 
             $table->foreignId('category_id')

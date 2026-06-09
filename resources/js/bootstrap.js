@@ -1,7 +1,11 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import Alpine from 'alpinejs';
 
 window.Pusher = Pusher;
+window.Alpine = Alpine;
+
+Alpine.start();
 
 /*
 |--------------------------------------------------------------------------

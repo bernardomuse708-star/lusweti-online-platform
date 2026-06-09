@@ -4,6 +4,7 @@ namespace App\Livewire\Frontend;
 
 use App\Models\Category;
 use App\Models\Article;
+use App\Models\PageSection;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -12,7 +13,15 @@ use Illuminate\Support\Collection;
 
 class SpotiMajuuTeaserRow extends Component
 {
-    
+    public ?PageSection $section = null;
+
+    public function mount(): void
+    {
+        // If section is provided, use its category
+        if ($this->section && $this->section->category) {
+            // Use section's category
+        }
+    }
 
     /**
      * Look-up and memory reference category layout settings context
@@ -20,6 +29,10 @@ class SpotiMajuuTeaserRow extends Component
     #[Computed]
     public function category(): ?Category
     {
+        if ($this->section && $this->section->category) {
+            return $this->section->category;
+        }
+
         return Category::where('slug', 'spoti-majuu')
             ->where('is_active', true)
             ->first();

@@ -33,18 +33,23 @@ class Page extends Model
         'status',
         'published_at',
 
+        'is_visible_in_nav',
+        'sort_order',
+
         'preview_token',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'is_visible_in_nav' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
-    public function sections(): HasMany
-    {
-        return $this->hasMany(PageSection::class)
-            ->orderBy('sort_order');
-    }
+    // public function sections(): HasMany
+    // {
+    //     return $this->hasMany(PageSection::class)
+    //         ->orderBy('sort_order');
+    // }
 
     public function visibleSections(): HasMany
     {
@@ -57,21 +62,11 @@ class Page extends Model
         return $this->hasMany(PageVersion::class);
     }
 
-    // public function scopePublished(
-    //     Builder $query
-    // ): Builder {
-    //     return $query
-    //         ->where('status', 'published')
-    //         ->where(function ($query) {
-    //             $query
-    //                 ->whereNull('published_at')
-    //                 ->orWhere(
-    //                     'published_at',
-    //                     '<=',
-    //                     now()
-    //                 );
-    //         });
-    // }
+    public function sections(): HasMany
+    {
+        return $this->hasMany(PageSection::class)
+            ->orderBy('sort_order');
+    }
 
 
     protected static function booted(): void
@@ -135,7 +130,4 @@ class Page extends Model
                     ->orWhere('published_at', '<=', now());
             });
     }
-
-
-    
 }

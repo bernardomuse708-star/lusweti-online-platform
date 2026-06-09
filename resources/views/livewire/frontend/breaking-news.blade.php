@@ -1,5 +1,5 @@
 {{-- 1. BREAKING NEWS TICKER (BBC Editorial Layout) --}}
-<div class="w-full bg-red-700 border-b border-red-800 rounded-none">
+<div class="w-full bg-red-700 border-b border-red-800 rounded-none mt-0.5">
     @if($this->hasBreaking())
     <div wire:key="breaking-ticker"
          x-data

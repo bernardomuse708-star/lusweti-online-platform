@@ -13,8 +13,8 @@ class DynamicPage extends Component
     public Page $page;
 
     protected $listeners = [
-    'echo:pages,PageUpdated' => '$refresh',
-];
+        'echo:pages,PageUpdated' => '$refresh',
+    ];
 
     public function mount(Page $page): void
     {
@@ -23,16 +23,12 @@ class DynamicPage extends Component
 
     public function render()
     {
-        $cacheKey = "page:{$this->page->id}";
-
-        $page = Cache::remember($cacheKey, 60, function () {
-
-                return $this->page->load([
-                    'sections.sectionType',
-                    'sections.category',
-                    'sections.items.article.category',
-                ]);
-            });
+        $page = $this->page->load([
+            'sections.sectionType',
+            'sections.category',
+            'sections.items.article.category',
+            'sections.items.article.media',
+        ]);
 
         return view('livewire.dynamic-page', [
             'page' => $page,

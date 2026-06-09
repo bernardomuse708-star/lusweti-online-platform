@@ -22,7 +22,7 @@ class CategoryPage extends Component
     }
 
     /**
-     * Replicating your Teaser logic so the Blade view has the exact 
+     * Replicating your Teaser logic so the Blade view has the exact
      * layout buckets it needs to render the 3-column grid.
      */
     public function getColumnLayoutsProperty(): array
@@ -31,11 +31,13 @@ class CategoryPage extends Component
         $large = Article::published()
             ->where('category_id', $this->category->id)
             ->where('is_featured_in_row', true)
+            ->with('media')
             ->first();
 
         if (!$large) {
             $large = Article::published()
                 ->where('category_id', $this->category->id)
+                ->with('media')
                 ->latest()
                 ->first();
         }
@@ -46,6 +48,7 @@ class CategoryPage extends Component
             $sideArticles = Article::published()
                 ->where('category_id', $this->category->id)
                 ->where('id', '!=', $large->id)
+                ->with('media')
                 ->latest()
                 ->take(4)
                 ->get();
@@ -61,6 +64,6 @@ class CategoryPage extends Component
 
     public function render(): View
     {
-        return view('livewire.frontend.category');
+        return view('livewire.frontend.category-page');
     }
 }

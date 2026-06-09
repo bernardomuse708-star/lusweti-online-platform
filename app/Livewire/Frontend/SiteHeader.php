@@ -61,6 +61,8 @@ class SiteHeader extends Component
         // Get published pages that should be visible in navigation
         return Page::published()
             ->where('status', 'published')
+            ->where('is_visible_in_nav', true)
+            ->orderBy('sort_order')
             ->orderBy('title')
             ->get(['title', 'slug']);
     }

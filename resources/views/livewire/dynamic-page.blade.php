@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-white">
+<div class="min-h-screen bg-white mx-auto max-w-7xl">
 
     {{-- HERO --}}
     @if($page->hero_title)
@@ -36,24 +36,20 @@
     {{-- PAGE SECTIONS --}}
     <div class="space-y-10 py-10">
 
-        @foreach($page->sections as $section)
+        @foreach($page->visibleSections as $section)
 
-            @if($section->is_visible)
+            <section
+                id="section-{{ $section->id }}"
+                wire:key="page-section-{{ $section->id }}"
+            >
 
-                <section
-                    id="section-{{ $section->id }}"
-                    wire:key="page-section-{{ $section->id }}"
-                >
+                <livewire:is
+                    :component="$section->sectionType->livewire_component"
+                    :section="$section"
+                    :key="'dynamic-section-'.$section->id"
+                />
 
-                    <livewire:is
-                        :component="$section->sectionType->livewire_component"
-                        :section="$section"
-                        :key="'dynamic-section-'.$section->id"
-                    />
-
-                </section>
-
-            @endif
+            </section>
 
         @endforeach
 
